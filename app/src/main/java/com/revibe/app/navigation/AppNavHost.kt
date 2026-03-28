@@ -17,11 +17,11 @@ fun AppNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppScreens.Login.route,
+        startDestination = AppScreens.Registration.route,
         modifier = modifier
     ) {
         composable(AppScreens.Login.route) { LoginScreen() }
         composable(AppScreens.Registration.route) { RegistrationScreen() }
-        composable(AppScreens.Catalog.route) { CatalogScreen() }
+        composable(AppScreens.Catalog.route) { CatalogScreen(products = listOf("200 ₽", "200 ₽", "200 ₽", "200 ₽", "200 ₽", "200 ₽")) }
     }
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="registration_title">Регистрация</string>
+    <string name="registration_name_placeholder">Как Вас зовут?</string>
+    <string name="registration_email_placeholder">Введите e-mail</string>
+    <string name="registration_password_placeholder">Введите пароль</string>
+    <string name="registration_confirm_password_placeholder">Подтвердите пароль</string>
+
+    <string name="registration_button">Зарегистрироваться</string>
+    <string name="registration_have_account">Уже есть аккаунт?</string>
+    <string name="registration_login">Войти</string>
+</resources>

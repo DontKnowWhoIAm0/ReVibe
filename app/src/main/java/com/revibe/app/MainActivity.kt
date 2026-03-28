@@ -11,27 +11,30 @@ import androidx.navigation.compose.rememberNavController
 import com.revibe.core.ui.BottomNavBar
 import com.revibe.app.navigation.AppNavHost
 import com.revibe.core.navigation.AppScreens
+import com.revibe.core.design.theme.RevibeTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            val navController = rememberNavController()
-            val navBackStackEntry = navController.currentBackStackEntryAsState()
-            val currentRoute = navBackStackEntry.value?.destination?.route
+            RevibeTheme {
+                val navController = rememberNavController()
+                val navBackStackEntry = navController.currentBackStackEntryAsState()
+                val currentRoute = navBackStackEntry.value?.destination?.route
 
-            val showBottomBar = currentRoute == AppScreens.Catalog.route
-            Scaffold(
-                bottomBar = {
-                    if (showBottomBar) {
-                        BottomNavBar(navController)
+                val showBottomBar = currentRoute == AppScreens.Catalog.route
+                Scaffold(
+                    bottomBar = {
+                        if (showBottomBar) {
+                            BottomNavBar(navController)
+                        }
                     }
+                ) { paddingValues ->
+                    AppNavHost(
+                        navController = navController,
+                        modifier = Modifier.padding(paddingValues)
+                    )
                 }
-            ) { paddingValues ->
-                AppNavHost(
-                    navController = navController,
-                    modifier = Modifier.padding(paddingValues)
-                )
             }
         }
     }

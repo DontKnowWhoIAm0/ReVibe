@@ -11,7 +11,7 @@ import com.revibe.core.navigation.AppScreens
 @Composable
 fun BottomNavBar(navController: NavController) {
     val items = listOf(
-        AppScreens.Catalog,
+        AppScreens.Catalog, AppScreens.Favourites, AppScreens.Cart, AppScreens.Profile
     )
     NavigationBar {
         val navBackStackEntry = navController.currentBackStackEntryAsState()
