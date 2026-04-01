@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources> Экран авторизации -->
+    <string name="login_title">Авторизация</string>
+
+    <string name="login_email_placeholder">Введите e-mail</string>
+    <string name="login_password_placeholder">Введите пароль</string>
+
+    <string name="login_button">Войти</string>
+
+    <string name="login_no_account">Еще нет аккаунта?</string>
+    <string name="login_register">Регистрация</string>
+
+</resources>
+
