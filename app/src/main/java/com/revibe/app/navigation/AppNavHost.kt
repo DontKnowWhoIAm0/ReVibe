@@ -12,13 +12,11 @@ import com.revibe.feature.catalog.presentation.CatalogScreen
 
 @Composable
 fun AppNavHost(
-    navController: NavHostController,
-    modifier: Modifier = Modifier
+    navController: NavHostController
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppScreens.Registration.route,
-        modifier = modifier
+        startDestination = AppScreens.Catalog.route
     ) {
         composable(AppScreens.Login.route) { LoginScreen() }
         composable(AppScreens.Registration.route) { RegistrationScreen() }
