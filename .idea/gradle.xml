@@ -21,6 +21,7 @@
             <option value="$PROJECT_DIR$/feature/filters" />
             <option value="$PROJECT_DIR$/feature/login" />
             <option value="$PROJECT_DIR$/feature/registration" />
+            <option value="$PROJECT_DIR$/feature/search" />
           </set>
         </option>
       </GradleProjectSettings>
