@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.revibe.feature"
+    namespace = "com.revibe.feature.filters"
     compileSdk = 36
 
     defaultConfig {

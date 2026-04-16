@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.revibe.feature"
+    namespace = "com.revibe.feature.product_details"
     compileSdk = 36
 
     defaultConfig {
@@ -43,6 +43,8 @@ dependencies {
     implementation("androidx.compose.ui:ui")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation("io.coil-kt:coil-compose:2.6.0")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
