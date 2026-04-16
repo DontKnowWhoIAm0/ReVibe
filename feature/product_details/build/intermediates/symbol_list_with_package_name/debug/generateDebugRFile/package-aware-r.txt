@@ -1,0 +1,1 @@
+com.revibe.feature.product_details

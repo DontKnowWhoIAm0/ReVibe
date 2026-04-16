@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="filters_title">Фильтры</string>
+    <string name="filter_category">Категория</string>
+    <string name="filter_show_all">Посмотреть все</string>
+    <string name="filter_gender">Пол</string>
+    <string name="filter_size">Размер</string>
+    <string name="filter_color">Цвет</string>
+    <string name="filter_brand">Бренд</string>
+    <string name="filter_condition">Состояние</string>
+    <string name="filter_price">Цена</string>
+
+    <string name="gender_unisex">У</string>
+    <string name="gender_female">Ж</string>
+    <string name="gender_male">М</string>
+
+    <string name="color_white">Белый</string>
+    <string name="color_black">Чёрный</string>
+    <string name="color_blue">Синий</string>
+    <string name="color_gray">Серый</string>
+
+    <string name="brand_1">Ляляля</string>
+    <string name="brand_2">Пупупу</string>
+    <string name="brand_3">Бебебе</string>
+    <string name="brand_4">И тд</string>
+
+    <string name="condition_new">Отличное</string>
+    <string name="condition_good">Хорошее</string>
+
+    <string name="price_range">от %1$d до %2$d рублей</string>
+
+    <string name="apply">Применить</string>
+    <string name="reset">Сбросить</string>
+</resources>
