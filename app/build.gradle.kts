@@ -2,7 +2,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.kapt)
 }
 
 android {
@@ -45,6 +45,7 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:db"))
     implementation(project(":core:navigation"))
+    implementation(project(":core:network"))
     implementation(project(":feature:login"))
     implementation(project(":feature:registration"))
     implementation(project(":feature:catalog"))
@@ -57,7 +58,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
 
     implementation(libs.dagger)
-    "ksp"(libs.dagger.compiler)
+    kapt(libs.dagger.compiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

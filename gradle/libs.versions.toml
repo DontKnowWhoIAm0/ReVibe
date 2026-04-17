@@ -1,13 +1,6 @@
 [versions]
 agp = "8.11.2"
 kotlin = "2.0.21"
-ksp = "2.3.5"
-
-# Используется в Convention plugin-ах
-min-sdk = "26"
-target-sdk = "36"
-compile-sdk = "36"
-java = "17"
 
 coreKtx = "1.18.0"
 appcompat = "1.7.1"
@@ -44,7 +37,7 @@ compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", versi
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose-ui" }
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
 
-dagger = { module = "com.google.dagger:dagger-android", version.ref = "dagger"}
+dagger = { module = "com.google.dagger:dagger", version.ref = "dagger"}
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger"}
 
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
@@ -64,16 +57,12 @@ kotlin-gradle-plugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-p
 
 [bundles]
 compose-ui = ["compose-ui", "compose-ui-graphics", "compose-ui-tooling", "compose-ui-tooling-preview"]
+retrofit = ["retrofit", "retrofit-converter-gson"]
 
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 android-library = { id = "com.android.library", version.ref = "agp" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+kapt = { id = "org.jetbrains.kotlin.kapt" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
-
-app-android-application = { id = "app.android.application" }
-app-android-library = { id = "app.android.library" }
-app-dagger = { id = "app.dagger" }
-app-compose = { id = "app.compose" }
