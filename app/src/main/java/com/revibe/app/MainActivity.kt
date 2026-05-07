@@ -31,10 +31,11 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 ) { paddingValues ->
-                    Box(
-                        modifier = Modifier.padding(paddingValues)
-                    ) {
-                        AppNavHost(navController)
+                    Box(modifier = Modifier.padding(paddingValues)) {
+                        AppNavHost(
+                            navController = navController,
+                            app = (application as ReVibe)
+                        )
                     }
 
                 }
