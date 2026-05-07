@@ -1,21 +1,25 @@
 package com.revibe.app
 
 import android.app.Application
+import com.revibe.app.di.AppComponent
+import com.revibe.app.di.AppModule
+import com.revibe.app.di.DaggerAppComponent
 import com.revibe.core.network.di.NetworkModule
-import com.revibe.core.network.ApiService
 import com.revibe.core.network.di.DaggerNetworkComponent
+import com.revibe.core.network.di.NetworkComponent
 
 class ReVibe : Application() {
 
-    lateinit var apiService: ApiService
-        private set
+    lateinit var appComponent: AppComponent
+    lateinit var networkComponent: NetworkComponent
 
     override fun onCreate() {
         super.onCreate()
 
-        val networkComponent = DaggerNetworkComponent.factory()
-            .create(NetworkModule("")) // ссылка
+        appComponent = DaggerAppComponent.factory()
+            .create(AppModule(this, "https://example.com/"))
 
-        apiService = networkComponent.apiService()
+        networkComponent = DaggerNetworkComponent.factory()
+            .create(appComponent)
     }
 }

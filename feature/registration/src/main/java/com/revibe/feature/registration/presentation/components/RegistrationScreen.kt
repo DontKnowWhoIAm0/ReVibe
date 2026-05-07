@@ -1,4 +1,4 @@
-package com.revibe.feature.registration.presentation
+package com.revibe.feature.registration.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -13,27 +13,24 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import com.revibe.core.R as CoreR
 import com.revibe.feature.registration.R
+import com.revibe.feature.registration.presentation.RegistrationViewModel
 
 @Composable
 fun RegistrationScreen(
+    viewModel: RegistrationViewModel,
     onRegisterClick: () -> Unit = {},
     onLoginClick: () -> Unit = {}
 ) {
+    val state by viewModel.state.collectAsState()
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
 
-    val buttonGradient = Brush.horizontalGradient(
-        colors = listOf(colors.primary, colors.primary.copy(alpha = 0.8f))
-    )
+    val buttonGradient = Brush.horizontalGradient(colors = listOf(colors.primary, colors.primary.copy(alpha = 0.8f)))
 
-    Scaffold(
-        containerColor = colors.background
-    ) { padding ->
+    Scaffold(containerColor = colors.background) { padding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -41,7 +38,6 @@ fun RegistrationScreen(
                 .padding(horizontal = 24.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Spacer(modifier = Modifier.height(70.dp))
 
             Image(
@@ -61,22 +57,32 @@ fun RegistrationScreen(
             Spacer(modifier = Modifier.height(40.dp))
 
             RegistrationTextField(
+                value = state.fullName,
+                onValueChange = viewModel::onFullNameChange,
                 placeholder = stringResource(R.string.registration_name_placeholder)
             )
+
             Spacer(modifier = Modifier.height(12.dp))
 
             RegistrationTextField(
+                value = state.email,
+                onValueChange = viewModel::onEmailChange,
                 placeholder = stringResource(R.string.registration_email_placeholder)
             )
+
             Spacer(modifier = Modifier.height(12.dp))
 
             RegistrationTextField(
+                value = state.password,
+                onValueChange = viewModel::onPasswordChange,
                 placeholder = stringResource(R.string.registration_password_placeholder),
                 isPassword = true
             )
             Spacer(modifier = Modifier.height(12.dp))
 
             RegistrationTextField(
+                value = state.confirmPassword,
+                onValueChange = viewModel::onConfirmPasswordChange,
                 placeholder = stringResource(R.string.registration_confirm_password_placeholder),
                 isPassword = true
             )
@@ -92,11 +98,20 @@ fun RegistrationScreen(
                     .clickable { onRegisterClick() },
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = stringResource(R.string.registration_button),
-                    color = colors.onPrimary,
-                    style = typography.bodyLarge
-                )
+                if (state.isLoading) {
+                    CircularProgressIndicator(color = colors.onPrimary, strokeWidth = 2.dp)
+                } else {
+                    Text(
+                        text = stringResource(R.string.registration_button),
+                        color = colors.onPrimary,
+                        style = typography.bodyLarge
+                    )
+                }
+            }
+
+            state.errorMessage?.let { msg ->
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(msg, color = MaterialTheme.colorScheme.error)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
@@ -117,34 +132,4 @@ fun RegistrationScreen(
             }
         }
     }
-}
-
-@Composable
-private fun RegistrationTextField(
-    placeholder: String,
-    isPassword: Boolean = false
-) {
-    val colors = MaterialTheme.colorScheme
-    val typography = MaterialTheme.typography
-
-    var text by remember { mutableStateOf("") }
-
-    TextField(
-        value = text,
-        onValueChange = { text = it },
-        placeholder = { Text(placeholder, style = typography.bodyMedium, color = colors.onSurfaceVariant) },
-        singleLine = true,
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .clip(RoundedCornerShape(6.dp)),
-        colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
-            unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
-            focusedContainerColor = colors.surface,
-            unfocusedContainerColor = colors.surface,
-            cursorColor = colors.primary
-        )
-    )
 }
