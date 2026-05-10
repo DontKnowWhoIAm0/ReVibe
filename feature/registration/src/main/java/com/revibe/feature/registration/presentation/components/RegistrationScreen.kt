@@ -22,13 +22,20 @@ import com.revibe.feature.registration.presentation.RegistrationViewModel
 fun RegistrationScreen(
     viewModel: RegistrationViewModel,
     onRegisterClick: () -> Unit = {},
-    onLoginClick: () -> Unit = {}
+    onLoginClick: () -> Unit = {},
+    onRegistrationSuccess: () -> Unit = {}
 ) {
     val state by viewModel.state.collectAsState()
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
 
     val buttonGradient = Brush.horizontalGradient(colors = listOf(colors.primary, colors.primary.copy(alpha = 0.8f)))
+
+    LaunchedEffect(state.success) {
+        if (state.success) {
+            onRegistrationSuccess()
+        }
+    }
 
     Scaffold(containerColor = colors.background) { padding ->
         Column(

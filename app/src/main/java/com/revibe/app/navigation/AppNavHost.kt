@@ -38,7 +38,12 @@ fun AppNavHost(
             RegistrationScreen(
                 viewModel = registrationViewModel,
                 onRegisterClick = { registrationViewModel.register() },
-                onLoginClick = { navController.navigate(AppScreens.Login.route) }
+                onLoginClick = { navController.navigate(AppScreens.Login.route) },
+                onRegistrationSuccess = {
+                    navController.navigate(AppScreens.Catalog.route) {
+                        popUpTo(AppScreens.Registration.route) { inclusive = true }
+                    }
+                }
             )
         }
 
