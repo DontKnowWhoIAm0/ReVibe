@@ -1,12 +1,11 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kapt)
 }
 
 android {
-    namespace = "com.revibe.feature.registration"
+    namespace = "com.revibe.core.data"
     compileSdk = 36
 
     defaultConfig {
@@ -32,28 +31,18 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
-    buildFeatures {
-        compose = true
-    }
 }
 
 dependencies {
-    implementation(project(":core"))
-    implementation(project(":core:network"))
-    implementation(project(":core:data"))
-
     implementation(libs.bundles.retrofit)
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
 
-    implementation(libs.bundles.compose.ui)
-    implementation("androidx.compose.material:material-icons-extended:1.7.8")
     implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
-    implementation(libs.androidx.material3.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

@@ -46,6 +46,7 @@ dependencies {
     implementation(project(":core:db"))
     implementation(project(":core:navigation"))
     implementation(project(":core:network"))
+    implementation(project(":core:data"))
     implementation(project(":feature:login"))
     implementation(project(":feature:registration"))
     implementation(project(":feature:catalog"))

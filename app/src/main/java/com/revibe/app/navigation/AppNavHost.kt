@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.revibe.app.ReVibe
+import com.revibe.core.data.di.DataStoreModule
 import com.revibe.core.navigation.AppScreens
 import com.revibe.feature.login.presentation.LoginScreen
 import com.revibe.feature.registration.presentation.components.RegistrationScreen
@@ -31,13 +32,14 @@ fun AppNavHost(
                 DaggerRegistrationComponent.factory()
                     .create(object : RegistrationDependencies {
                         override fun retrofit() = app.networkComponent.retrofit()
-                    })
+                    },
+                        dataStoreModule = DataStoreModule(app)
+                    )
                     .registrationViewModel()
             }
 
             RegistrationScreen(
                 viewModel = registrationViewModel,
-                onRegisterClick = { registrationViewModel.register() },
                 onLoginClick = { navController.navigate(AppScreens.Login.route) },
                 onRegistrationSuccess = {
                     navController.navigate(AppScreens.Catalog.route) {
