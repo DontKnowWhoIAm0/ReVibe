@@ -1,10 +1,12 @@
-package com.revibe.feature.login.presentation
+package com.revibe.feature.login.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -13,23 +15,30 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.revibe.core.R as CoreR
 import com.revibe.feature.login.R
+import com.revibe.feature.login.presentation.LoginViewModel
 
 @Composable
 fun LoginScreen(
-    onLoginClick: () -> Unit = {},
-    onRegisterClick: () -> Unit = {}
+    viewModel: LoginViewModel,
+    onRegisterClick: () -> Unit = {},
+    onLoginSuccess: () -> Unit = {}
 ) {
+    val state by viewModel.state.collectAsState()
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
 
     val buttonGradient = Brush.horizontalGradient(
         colors = listOf(colors.primary, colors.primary.copy(alpha = 0.8f))
     )
+
+    LaunchedEffect(state.success) {
+        if (state.success) { onLoginSuccess() }
+    }
 
     Scaffold(
         containerColor = colors.background
@@ -38,10 +47,10 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 24.dp),
+                .padding(horizontal = 24.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-
             Spacer(modifier = Modifier.height(70.dp))
 
             Image(
@@ -61,13 +70,27 @@ fun LoginScreen(
             Spacer(modifier = Modifier.height(40.dp))
 
             LoginTextField(
-                placeholder = stringResource(R.string.login_email_placeholder)
+                value = state.email,
+                onValueChange = viewModel::onEmailChange,
+                placeholder = stringResource(R.string.login_email_placeholder),
+                keyboardType = KeyboardType.Email,
+                isError = state.emailError != null,
+                errorMessage = state.emailError,
+                imeAction = ImeAction.Next
             )
+
             Spacer(modifier = Modifier.height(12.dp))
 
             LoginTextField(
+                value = state.password,
+                onValueChange = viewModel::onPasswordChange,
                 placeholder = stringResource(R.string.login_password_placeholder),
-                isPassword = true
+                isPassword = true,
+                passwordVisible = state.isPasswordVisible,
+                onPasswordToggle = viewModel::onTogglePasswordVisibility,
+                isError = state.passwordError != null,
+                errorMessage = state.passwordError,
+                imeAction = ImeAction.Done
             )
 
             Spacer(modifier = Modifier.height(30.dp))
@@ -78,19 +101,32 @@ fun LoginScreen(
                     .height(48.dp)
                     .clip(RoundedCornerShape(25.dp))
                     .background(buttonGradient)
-                    .clickable { onLoginClick() },
+                    .clickable(enabled = !state.isLoading) { viewModel.login() },
                 contentAlignment = Alignment.Center
             ) {
-                Text(
-                    text = stringResource(R.string.login_button),
-                    color = colors.onPrimary,
-                    style = typography.bodyLarge
-                )
+                if (state.isLoading) {
+                    CircularProgressIndicator(
+                        color = colors.onPrimary,
+                        strokeWidth = 2.dp,
+                        modifier = Modifier.size(24.dp)
+                    )
+                } else {
+                    Text(
+                        text = stringResource(R.string.login_button),
+                        color = colors.onPrimary,
+                        style = typography.bodyLarge
+                    )
+                }
+            }
+
+            state.errorMessage?.let { msg ->
+                Spacer(modifier = Modifier.height(8.dp))
+                Text(msg, color = MaterialTheme.colorScheme.error, style = typography.bodySmall)
             }
 
             Spacer(modifier = Modifier.height(16.dp))
 
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Text(
                     text = stringResource(R.string.login_no_account),
                     color = colors.onBackground.copy(alpha = 0.6f),
@@ -104,42 +140,8 @@ fun LoginScreen(
                     modifier = Modifier.clickable { onRegisterClick() }
                 )
             }
+
+            Spacer(modifier = Modifier.height(32.dp))
         }
     }
-}
-
-@Composable
-private fun LoginTextField(
-    placeholder: String,
-    isPassword: Boolean = false
-) {
-    val colors = MaterialTheme.colorScheme
-    val typography = MaterialTheme.typography
-
-    var text by remember { mutableStateOf("") }
-
-    TextField(
-        value = text,
-        onValueChange = { text = it },
-        placeholder = {
-            Text(
-                placeholder,
-                style = typography.bodyMedium,
-                color = colors.onSurfaceVariant
-            )
-        },
-        singleLine = true,
-        visualTransformation = if (isPassword) PasswordVisualTransformation() else VisualTransformation.None,
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(48.dp)
-            .clip(RoundedCornerShape(6.dp)),
-        colors = TextFieldDefaults.colors(
-            focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
-            unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
-            focusedContainerColor = colors.surface,
-            unfocusedContainerColor = colors.surface,
-            cursorColor = colors.primary
-        )
-    )
 }

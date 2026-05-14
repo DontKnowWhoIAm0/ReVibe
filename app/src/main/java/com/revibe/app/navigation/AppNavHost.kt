@@ -8,11 +8,13 @@ import androidx.navigation.compose.composable
 import com.revibe.app.ReVibe
 import com.revibe.core.data.di.DataStoreModule
 import com.revibe.core.navigation.AppScreens
-import com.revibe.feature.login.presentation.LoginScreen
+import com.revibe.feature.login.presentation.components.LoginScreen
 import com.revibe.feature.registration.presentation.components.RegistrationScreen
 import com.revibe.feature.catalog.presentation.CatalogScreen
+import com.revibe.feature.login.di.LoginDependencies
 import com.revibe.feature.product_details.presentation.components.ProductScreen
 import com.revibe.feature.registration.di.DaggerRegistrationComponent
+import com.revibe.feature.login.di.DaggerLoginComponent
 import com.revibe.feature.registration.di.RegistrationDependencies
 
 @Composable
@@ -24,7 +26,29 @@ fun AppNavHost(
         navController = navController,
         startDestination = AppScreens.Registration.route
     ) {
-        composable(AppScreens.Login.route) { LoginScreen() }
+        composable(AppScreens.Login.route) {
+
+            val loginViewModel = remember {
+                DaggerLoginComponent.factory()
+                    .create(object : LoginDependencies {
+                        override fun retrofit() = app.networkComponent.retrofit()
+                    },
+                        dataStoreModule = DataStoreModule(app)
+                    )
+                    .loginViewModel()
+            }
+
+            LoginScreen(
+                viewModel = loginViewModel,
+                onRegisterClick = { navController.navigate(AppScreens.Registration.route) },
+                onLoginSuccess = {
+                    navController.navigate(AppScreens.Catalog.route) {
+                        popUpTo(AppScreens.Login.route) { inclusive = true }
+                    }
+                }
+            )
+
+        }
 
         composable(AppScreens.Registration.route) {
 
