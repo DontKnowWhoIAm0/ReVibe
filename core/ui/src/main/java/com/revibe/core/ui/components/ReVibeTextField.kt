@@ -1,8 +1,7 @@
-package com.revibe.feature.login.presentation.components
+package com.revibe.core.ui.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
@@ -26,7 +25,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun LoginTextField(
+fun ReVibeTextField(
     value: String,
     onValueChange: (String) -> Unit,
     placeholder: String,
@@ -49,7 +48,7 @@ fun LoginTextField(
             onValueChange = onValueChange,
             placeholder = {
                 Text(
-                    placeholder,
+                    text = placeholder,
                     style = typography.bodyMedium,
                     color = colors.onSurfaceVariant
                 )
@@ -68,7 +67,8 @@ fun LoginTextField(
                         Icon(
                             imageVector = if (passwordVisible) Icons.Filled.Visibility
                             else Icons.Filled.VisibilityOff,
-                            contentDescription = null,
+                            contentDescription = if (passwordVisible) "Скрыть пароль"
+                            else "Показать пароль",
                             tint = colors.onSurfaceVariant
                         )
                     }
@@ -76,7 +76,6 @@ fun LoginTextField(
             } else null,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(48.dp)
                 .clip(RoundedCornerShape(6.dp)),
             colors = TextFieldDefaults.colors(
                 focusedIndicatorColor = Color.Transparent,
@@ -84,7 +83,7 @@ fun LoginTextField(
                 errorIndicatorColor = Color.Transparent,
                 focusedContainerColor = containerColor,
                 unfocusedContainerColor = containerColor,
-                errorContainerColor = containerColor,
+                errorContainerColor = colors.errorContainer,
                 cursorColor = colors.primary
             )
         )

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.revibe.core.R as CoreR
 import com.revibe.feature.login.R
 import com.revibe.feature.login.presentation.LoginViewModel
+import com.revibe.core.ui.components.ReVibeTextField
 
 @Composable
 fun LoginScreen(
@@ -69,7 +70,7 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            LoginTextField(
+            ReVibeTextField(
                 value = state.email,
                 onValueChange = viewModel::onEmailChange,
                 placeholder = stringResource(R.string.login_email_placeholder),
@@ -81,7 +82,7 @@ fun LoginScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            LoginTextField(
+            ReVibeTextField(
                 value = state.password,
                 onValueChange = viewModel::onPasswordChange,
                 placeholder = stringResource(R.string.login_password_placeholder),

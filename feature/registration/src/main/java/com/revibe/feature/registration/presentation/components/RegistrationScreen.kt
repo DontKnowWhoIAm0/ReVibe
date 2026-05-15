@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import com.revibe.core.R as CoreR
 import com.revibe.feature.registration.R
 import com.revibe.feature.registration.presentation.RegistrationViewModel
+import com.revibe.core.ui.components.ReVibeTextField
 
 @Composable
 fun RegistrationScreen(
@@ -65,7 +66,7 @@ fun RegistrationScreen(
 
             Spacer(modifier = Modifier.height(40.dp))
 
-            RegistrationTextField(
+            ReVibeTextField(
                 value = state.fullName,
                 onValueChange = viewModel::onFullNameChange,
                 placeholder = stringResource(R.string.registration_name_placeholder),
@@ -76,7 +77,7 @@ fun RegistrationScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            RegistrationTextField(
+            ReVibeTextField(
                 value = state.email,
                 onValueChange = viewModel::onEmailChange,
                 placeholder = stringResource(R.string.registration_email_placeholder),
@@ -88,7 +89,7 @@ fun RegistrationScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            RegistrationTextField(
+            ReVibeTextField(
                 value = state.password,
                 onValueChange = viewModel::onPasswordChange,
                 placeholder = stringResource(R.string.registration_password_placeholder),
@@ -101,7 +102,7 @@ fun RegistrationScreen(
             )
             Spacer(modifier = Modifier.height(12.dp))
 
-            RegistrationTextField(
+            ReVibeTextField(
                 value = state.confirmPassword,
                 onValueChange = viewModel::onConfirmPasswordChange,
                 placeholder = stringResource(R.string.registration_confirm_password_placeholder),

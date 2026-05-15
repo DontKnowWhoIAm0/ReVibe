@@ -41,13 +41,13 @@ dependencies {
     implementation(project(":core"))
     implementation(project(":core:network"))
     implementation(project(":core:data"))
+    implementation(project(":core:ui"))
 
     implementation(libs.bundles.retrofit)
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
 
     implementation(libs.bundles.compose.ui)
-    implementation("androidx.compose.material:material-icons-extended:1.7.8")
     implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.androidx.core.ktx)
