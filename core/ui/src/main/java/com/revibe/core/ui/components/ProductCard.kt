@@ -1,6 +1,5 @@
 package com.revibe.core.ui.components
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -13,13 +12,16 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
 import com.revibe.core.R
-
 
 @Composable
 fun ProductCard(
+    name: String,
     price: String,
+    imageUrl: String?,
     onClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {}
 ) {
@@ -40,13 +42,13 @@ fun ProductCard(
                 .background(colors.surfaceVariant),
             contentAlignment = Alignment.TopEnd
         ) {
-            Image(
-                painter = painterResource(id = R.drawable.placeholder),
-                contentDescription = null,
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                contentScale = ContentScale.Fit
+            AsyncImage(
+                model = imageUrl,
+                contentDescription = name,
+                modifier = Modifier.fillMaxSize(),
+                contentScale = ContentScale.Crop,
+                error = painterResource(id = R.drawable.placeholder),
+                placeholder = painterResource(id = R.drawable.placeholder)
             )
 
             Icon(
@@ -67,13 +69,20 @@ fun ProductCard(
                 .padding(horizontal = 12.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Text(
-                text = price,
-                style = typography.titleMedium.copy(fontWeight = FontWeight.Bold),
-                color = colors.onBackground
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
+            Column(modifier = Modifier.weight(1f)) {
+                Text(
+                    text = price,
+                    style = typography.titleMedium.copy(fontWeight = FontWeight.Bold),
+                    color = colors.onBackground
+                )
+                Text(
+                    text = name,
+                    style = typography.bodySmall,
+                    color = colors.onSurfaceVariant,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
 
             Icon(
                 painter = painterResource(id = R.drawable.add_to_cart),

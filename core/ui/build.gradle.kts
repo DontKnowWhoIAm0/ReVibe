@@ -41,6 +41,7 @@ dependencies {
     implementation(project(":core"))
 
     implementation(libs.bundles.compose.ui)
+    implementation(libs.coil.compose)
 
     implementation("androidx.navigation:navigation-compose:2.7.3")
 

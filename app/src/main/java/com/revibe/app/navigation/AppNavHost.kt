@@ -8,13 +8,15 @@ import androidx.navigation.compose.composable
 import com.revibe.app.ReVibe
 import com.revibe.core.data.di.DataStoreModule
 import com.revibe.core.navigation.AppScreens
+import com.revibe.feature.catalog.di.CatalogDependencies
+import com.revibe.feature.catalog.presentation.components.CatalogScreen
 import com.revibe.feature.login.presentation.components.LoginScreen
 import com.revibe.feature.registration.presentation.components.RegistrationScreen
-import com.revibe.feature.catalog.presentation.CatalogScreen
 import com.revibe.feature.login.di.LoginDependencies
 import com.revibe.feature.product_details.presentation.components.ProductScreen
 import com.revibe.feature.registration.di.DaggerRegistrationComponent
 import com.revibe.feature.login.di.DaggerLoginComponent
+import com.revibe.feature.catalog.di.DaggerCatalogComponent
 import com.revibe.feature.registration.di.RegistrationDependencies
 
 @Composable
@@ -31,8 +33,8 @@ fun AppNavHost(
             val loginViewModel = remember {
                 DaggerLoginComponent.factory()
                     .create(object : LoginDependencies {
-                        override fun retrofit() = app.networkComponent.retrofit()
-                    },
+                            override fun retrofit() = app.networkComponent.retrofit()
+                        },
                         dataStoreModule = DataStoreModule(app)
                     )
                     .loginViewModel()
@@ -73,7 +75,25 @@ fun AppNavHost(
             )
         }
 
-        composable(AppScreens.Catalog.route) { CatalogScreen(products = listOf("200 ₽", "200 ₽", "200 ₽", "200 ₽", "200 ₽", "200 ₽")) }
+        composable(AppScreens.Catalog.route) {
+            val catalogViewModel = remember {
+                DaggerCatalogComponent.factory()
+                    .create(object : CatalogDependencies {
+                        override fun retrofit() = app.networkComponent.retrofit()
+                    })
+                    .catalogViewModel()
+            }
+
+            CatalogScreen(
+                viewModel = catalogViewModel,
+                onProductClick = { product ->
+                    navController.navigate(AppScreens.ProductDetails.route)
+                },
+                onFavoriteClick = { /* TODO */ },
+                onSearchClick = { /* TODO */ },
+                onFilterClick = { /* TODO */ }
+            )
+        }
 
         composable(AppScreens.ProductDetails.route) { ProductScreen(
             onBackClick = { navController.popBackStack() },

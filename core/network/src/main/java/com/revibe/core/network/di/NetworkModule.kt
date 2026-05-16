@@ -2,6 +2,7 @@ package com.revibe.core.network.di
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
+import com.revibe.core.data.local.TokenDataStore
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -23,8 +24,9 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideOkHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(tokenDataStore: TokenDataStore): OkHttpClient {
         return OkHttpClient.Builder()
+            .addInterceptor(AuthInterceptor(tokenDataStore))
             .connectTimeout(30, TimeUnit.SECONDS)
             .build()
     }

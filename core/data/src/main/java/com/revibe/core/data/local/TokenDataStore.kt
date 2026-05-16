@@ -7,6 +7,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
+import kotlinx.coroutines.flow.first
 
 class TokenDataStore @Inject constructor(
     private val dataStore: DataStore<Preferences>
@@ -16,6 +17,8 @@ class TokenDataStore @Inject constructor(
     suspend fun saveToken(token: String) {
         dataStore.edit { it[KEY_TOKEN] = token }
     }
+
+    suspend fun getToken(): String? = dataStore.data.map { it[KEY_TOKEN] }.first()
 
     val tokenFlow: Flow<String?> = dataStore.data.map { it[KEY_TOKEN] }
 }
