@@ -34,9 +34,12 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:data"))
+
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
     implementation(libs.bundles.retrofit)
+    implementation(libs.androidx.datastore.preferences)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
