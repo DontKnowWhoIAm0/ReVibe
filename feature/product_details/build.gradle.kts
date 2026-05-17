@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kapt)
 }
 
 android {
@@ -38,14 +39,15 @@ android {
 
 dependencies {
     implementation(project(":core"))
+    implementation(project(":core:network"))
+    implementation(project(":core:ui"))
 
-    implementation(platform("androidx.compose:compose-bom:2024.06.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    implementation("io.coil-kt:coil-compose:2.6.0")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.6")
+    implementation(libs.bundles.retrofit)
+    implementation(libs.coil.compose)
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
 
+    implementation(libs.bundles.compose.ui)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

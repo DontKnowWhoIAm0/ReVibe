@@ -7,5 +7,7 @@ sealed class AppScreens(val route: String) {
     object Favourites : AppScreens("favourites")
     object Cart : AppScreens("cart")
     object Profile : AppScreens("profile")
-    object ProductDetails : AppScreens("product_details")
+    object ProductDetails : AppScreens("product_details/{article}") {
+        fun createRoute(article: String) = "product_details/$article"
+    }
 }

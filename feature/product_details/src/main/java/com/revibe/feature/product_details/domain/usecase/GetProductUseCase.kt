@@ -1,14 +1,12 @@
 package com.revibe.feature.product_details.domain.usecase
 
-import com.revibe.feature.product_details.domain.model.ProductDomainModel
-import com.revibe.feature.product_details.domain.repository.ProductRepository
+import com.revibe.feature.product_details.data.ProductDetailsRepository
+import com.revibe.feature.product_details.domain.model.ProductDetail
+import javax.inject.Inject
 
-
-class GetProductUseCase(
-    private val repository: ProductRepository
+class GetProductUseCase @Inject constructor(
+    private val repository: ProductDetailsRepository
 ) {
-
-    suspend operator fun invoke(productId: Long): ProductDomainModel {
-        return repository.getProduct(productId)
-    }
+    suspend operator fun invoke(article: String): ProductDetail =
+        repository.getProduct(article)
 }
