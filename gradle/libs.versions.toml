@@ -38,6 +38,7 @@ compose-ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", versi
 compose-ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "compose-ui" }
 androidx-material3-android = { group = "androidx.compose.material3", name = "material3-android", version.ref = "material3Android" }
 compose-material-icons = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "icons"}
+compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "compose-ui" }
 
 dagger = { module = "com.google.dagger:dagger", version.ref = "dagger"}
 dagger-compiler = { module = "com.google.dagger:dagger-compiler", version.ref = "dagger"}
@@ -58,7 +59,7 @@ androidx-datastore-preferences = { group = "androidx.datastore", name = "datasto
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
 [bundles]
-compose-ui = ["compose-ui", "compose-ui-graphics", "compose-ui-tooling", "compose-ui-tooling-preview", "compose-material-icons"]
+compose-ui = ["compose-ui", "compose-ui-graphics", "compose-ui-tooling", "compose-ui-tooling-preview", "compose-material-icons",  "compose-foundation", "androidx-material3-android"]
 retrofit = ["retrofit", "retrofit-converter-gson"]
 
 

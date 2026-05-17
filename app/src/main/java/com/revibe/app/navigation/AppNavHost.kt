@@ -17,6 +17,8 @@ import com.revibe.feature.product_details.presentation.components.ProductScreen
 import com.revibe.feature.registration.di.DaggerRegistrationComponent
 import com.revibe.feature.login.di.DaggerLoginComponent
 import com.revibe.feature.catalog.di.DaggerCatalogComponent
+import com.revibe.feature.product_details.di.DaggerProductDetailsComponent
+import com.revibe.feature.product_details.di.ProductDetailsDependencies
 import com.revibe.feature.registration.di.RegistrationDependencies
 
 @Composable
@@ -33,8 +35,8 @@ fun AppNavHost(
             val loginViewModel = remember {
                 DaggerLoginComponent.factory()
                     .create(object : LoginDependencies {
-                            override fun retrofit() = app.networkComponent.retrofit()
-                        },
+                        override fun retrofit() = app.networkComponent.retrofit()
+                    },
                         dataStoreModule = DataStoreModule(app)
                     )
                     .loginViewModel()
@@ -87,7 +89,7 @@ fun AppNavHost(
             CatalogScreen(
                 viewModel = catalogViewModel,
                 onProductClick = { product ->
-                    navController.navigate(AppScreens.ProductDetails.route)
+                    navController.navigate(AppScreens.ProductDetails.createRoute(product.article.toString()))
                 },
                 onFavoriteClick = { /* TODO */ },
                 onSearchClick = { /* TODO */ },
@@ -95,12 +97,27 @@ fun AppNavHost(
             )
         }
 
-        composable(AppScreens.ProductDetails.route) { ProductScreen(
-            onBackClick = { navController.popBackStack() },
-            onCreateOutfitClick = { /* TODO */ },
-            onViewOutfitClick = { /* TODO */ },
-            onFavoriteClick = {},
-            onAddToCartClick = {}
-        ) }
+        composable(AppScreens.ProductDetails.route) { backStackEntry ->
+            val article = backStackEntry.arguments?.getString("article") ?: return@composable
+
+            val viewModel = remember(article) {
+                DaggerProductDetailsComponent.factory()
+                    .create(
+                        dependencies = object : ProductDetailsDependencies {
+                            override fun retrofit() = app.networkComponent.retrofit()
+                        },
+                        article = article
+                    )
+                    .productDetailsViewModel()
+            }
+
+            ProductScreen(
+                viewModel = viewModel,
+                onBackClick = { navController.popBackStack() },
+                onCreateOutfitClick = { /* TODO */ },
+                onViewOutfitClick = { /* TODO */ },
+                onFavoriteClick = { /* TODO */ }
+            )
+        }
     }
 }
