@@ -79,8 +79,10 @@ fun CatalogScreen(
                                 name = product.name,
                                 price = "${product.price} ₽",
                                 imageUrl = product.imageUrl,
+                                isFavourite = false,
                                 onClick = { onProductClick(product) },
-                                onFavoriteClick = { onFavoriteClick(product) }
+                                onFavoriteClick = { onFavoriteClick(product) },
+                                onCartClick = { /* TODO */ }
                             )
                         }
                     }

@@ -15,7 +15,7 @@
     import androidx.compose.ui.unit.*
     import coil.compose.AsyncImage
     import com.revibe.feature.product_details.presentation.ProductDetailsViewModel
-    import com.revibe.core.R as CoreR
+    import com.revibe.core.ui.R as CoreR
 
     @Composable
     fun ProductScreen(

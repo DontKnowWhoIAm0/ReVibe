@@ -17,6 +17,9 @@ import com.revibe.feature.product_details.presentation.components.ProductScreen
 import com.revibe.feature.registration.di.DaggerRegistrationComponent
 import com.revibe.feature.login.di.DaggerLoginComponent
 import com.revibe.feature.catalog.di.DaggerCatalogComponent
+import com.revibe.feature.favourites.di.DaggerFavouritesComponent
+import com.revibe.feature.favourites.di.FavouritesDependencies
+import com.revibe.feature.favourites.presentation.components.FavouritesScreen
 import com.revibe.feature.product_details.di.DaggerProductDetailsComponent
 import com.revibe.feature.product_details.di.ProductDetailsDependencies
 import com.revibe.feature.registration.di.RegistrationDependencies
@@ -117,6 +120,26 @@ fun AppNavHost(
                 onCreateOutfitClick = { /* TODO */ },
                 onViewOutfitClick = { /* TODO */ },
                 onFavoriteClick = { /* TODO */ }
+            )
+        }
+
+        composable(AppScreens.Favourites.route) {
+            val favouritesViewModel = remember {
+                DaggerFavouritesComponent.factory()
+                    .create(object : FavouritesDependencies {
+                        override fun retrofit() = app.networkComponent.retrofit()
+                    })
+                    .favouritesViewModel()
+            }
+
+            FavouritesScreen(
+                viewModel = favouritesViewModel,
+                onProductClick = { product ->
+                    navController.navigate(
+                        AppScreens.ProductDetails.createRoute(product.article.toString())
+                    )
+                },
+                onCartClick = { /* TODO */ }
             )
         }
     }
