@@ -1,5 +1,7 @@
 package com.revibe.feature.product_details.data.impl
 
+import com.revibe.core.network.favourites.FavouritesApiService
+import com.revibe.core.network.util.parseErrorMessage
 import com.revibe.feature.product_details.data.ProductDetailsApiService
 import com.revibe.feature.product_details.data.ProductDetailsRepository
 import com.revibe.feature.product_details.data.dto.ProductDetailDto
@@ -8,7 +10,8 @@ import org.json.JSONObject
 import javax.inject.Inject
 
 class ProductDetailsRepositoryImpl @Inject constructor(
-    private val apiService: ProductDetailsApiService
+    private val apiService: ProductDetailsApiService,
+    private val favouritesApiService: FavouritesApiService
 ) : ProductDetailsRepository {
 
     override suspend fun getProduct(article: String): ProductDetail {
@@ -26,6 +29,24 @@ class ProductDetailsRepositoryImpl @Inject constructor(
         }
 
         throw Exception(errorMessage)
+    }
+
+    override suspend fun addToFavourites(userId: String, productId: String) {
+        val response = favouritesApiService.addToFavourites(userId, productId)
+        if (!response.isSuccessful)
+            throw Exception(parseErrorMessage(response.errorBody()?.string(), response.code()))
+    }
+
+    override suspend fun removeFromFavourites(userId: String, productId: String) {
+        val response = favouritesApiService.removeFromFavourites(productId, userId)
+        if (!response.isSuccessful)
+            throw Exception(parseErrorMessage(response.errorBody()?.string(), response.code()))
+    }
+
+    override suspend fun isFavourite(userId: String, article: String): Boolean {
+        val response = favouritesApiService.isFavourite(userId, article)
+        if (response.isSuccessful) return response.body() ?: false
+        throw Exception("Ошибка ${response.code()}")
     }
 
     private fun ProductDetailDto.toDomain() = ProductDetail(

@@ -23,7 +23,12 @@ class MainActivity : ComponentActivity() {
                 val navBackStackEntry = navController.currentBackStackEntryAsState()
                 val currentRoute = navBackStackEntry.value?.destination?.route
 
-                val showBottomBar = currentRoute == AppScreens.Catalog.route
+                val showBottomBar = currentRoute in setOf(
+                    AppScreens.Catalog.route,
+                    AppScreens.Favourites.route,
+                    AppScreens.Cart.route,
+                    AppScreens.Profile.route
+                )
                 Scaffold(
                     bottomBar = {
                         if (showBottomBar) {

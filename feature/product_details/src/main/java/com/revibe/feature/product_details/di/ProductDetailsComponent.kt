@@ -18,7 +18,9 @@ interface ProductDetailsComponent {
     interface Factory {
         fun create(
             dependencies: ProductDetailsDependencies,
-            @BindsInstance article: String
+            @BindsInstance @ArticleId article: String,
+            @BindsInstance @UserId userId: String,
+            @BindsInstance @IsFavourite isFavourite: Boolean
         ): ProductDetailsComponent
     }
 }

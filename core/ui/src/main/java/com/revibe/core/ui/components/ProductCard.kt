@@ -15,15 +15,17 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.revibe.core.R
+import com.revibe.core.ui.R
 
 @Composable
 fun ProductCard(
     name: String,
     price: String,
     imageUrl: String?,
+    isFavourite: Boolean = false,
     onClick: () -> Unit = {},
-    onFavoriteClick: () -> Unit = {}
+    onFavoriteClick: () -> Unit = {},
+    onCartClick: () -> Unit = {}
 ) {
     val colors = MaterialTheme.colorScheme
     val typography = MaterialTheme.typography
@@ -52,7 +54,9 @@ fun ProductCard(
             )
 
             Icon(
-                painter = painterResource(id = R.drawable.add_to_favourite),
+                painter = painterResource(
+                    id = if (isFavourite) R.drawable.favourite else R.drawable.add_to_favourite
+                ),
                 contentDescription = null,
                 tint = colors.outline,
                 modifier = Modifier

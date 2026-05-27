@@ -13,12 +13,19 @@ class TokenDataStore @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) {
     private val KEY_TOKEN = stringPreferencesKey("auth_token")
+    private val KEY_USER_ID = stringPreferencesKey("user_id")
 
     suspend fun saveToken(token: String) {
         dataStore.edit { it[KEY_TOKEN] = token }
     }
 
+    suspend fun saveUserId(userId: String) {
+        dataStore.edit { it[KEY_USER_ID] = userId }
+    }
+
     suspend fun getToken(): String? = dataStore.data.map { it[KEY_TOKEN] }.first()
 
     val tokenFlow: Flow<String?> = dataStore.data.map { it[KEY_TOKEN] }
+
+    suspend fun getUserId(): String? = dataStore.data.map { it[KEY_USER_ID] }.first()
 }

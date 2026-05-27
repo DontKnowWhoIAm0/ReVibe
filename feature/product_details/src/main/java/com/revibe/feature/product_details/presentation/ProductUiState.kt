@@ -11,5 +11,7 @@ data class ProductUiState(
     val location: String = "",
     val imageUrl: String? = null,
     val isLoading: Boolean = false,
-    val errorMessage: String? = null
+    val errorMessage: String? = null,
+    val isFavourite: Boolean = false,
+    val favouriteError: String? = null
 )

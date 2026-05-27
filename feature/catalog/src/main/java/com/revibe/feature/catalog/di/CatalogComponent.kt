@@ -1,6 +1,7 @@
 package com.revibe.feature.catalog.di
 
 import com.revibe.feature.catalog.presentation.CatalogViewModel
+import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
@@ -15,6 +16,6 @@ interface CatalogComponent {
 
     @Component.Factory
     interface Factory {
-        fun create(dependencies: CatalogDependencies): CatalogComponent
+        fun create(dependencies: CatalogDependencies, @BindsInstance userId: String ): CatalogComponent
     }
 }

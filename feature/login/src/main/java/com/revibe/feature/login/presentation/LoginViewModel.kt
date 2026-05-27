@@ -61,6 +61,7 @@ class LoginViewModel @Inject constructor(
                     )
                 )
                 tokenDataStore.saveToken(response.token)
+                tokenDataStore.saveUserId(response.userId)
 
                 _state.value = _state.value.copy(isLoading = false, success = true)
             } catch (e: Exception) {

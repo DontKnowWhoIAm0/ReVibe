@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
-import com.revibe.core.R as CoreR
+import com.revibe.core.ui.R as CoreR
 import com.revibe.feature.login.R
 import com.revibe.feature.login.presentation.LoginViewModel
 import com.revibe.core.ui.components.ReVibeTextField
