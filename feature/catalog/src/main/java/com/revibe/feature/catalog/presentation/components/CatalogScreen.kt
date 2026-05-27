@@ -79,6 +79,7 @@ fun CatalogScreen(
                                 price = "${product.price} ₽",
                                 imageUrl = product.imageUrl,
                                 isFavourite = product.article in state.favouriteArticles,
+                                isInCart = false,
                                 onClick = { onProductClick(product) },
                                 onFavoriteClick = { viewModel.toggleFavourite(product) },
                                 onCartClick = { /* TODO */ }
