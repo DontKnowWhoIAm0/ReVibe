@@ -28,6 +28,38 @@ class ProductDetailsRepositoryImpl @Inject constructor(
         throw Exception(errorMessage)
     }
 
+    override suspend fun addToFavourites(userId: String, productId: String) {
+        val response = apiService.addToFavourites(userId, productId)
+        if (!response.isSuccessful) {
+            val errorBody = response.errorBody()?.string()
+            val errorMessage = try {
+                JSONObject(errorBody ?: "").getString("error")
+            } catch (e: Exception) {
+                "Ошибка ${response.code()}"
+            }
+            throw Exception(errorMessage)
+        }
+    }
+
+    override suspend fun removeFromFavourites(userId: String, productId: String) {
+        val response = apiService.removeFromFavourites(userId, productId)
+        if (!response.isSuccessful) {
+            val errorBody = response.errorBody()?.string()
+            val errorMessage = try {
+                JSONObject(errorBody ?: "").getString("error")
+            } catch (e: Exception) {
+                "Ошибка ${response.code()}"
+            }
+            throw Exception(errorMessage)
+        }
+    }
+
+    override suspend fun isFavourite(userId: String, article: String): Boolean {
+        val response = apiService.isFavourite(userId, article)
+        if (response.isSuccessful) return response.body() ?: false
+        throw Exception("Ошибка ${response.code()}")
+    }
+
     private fun ProductDetailDto.toDomain() = ProductDetail(
         article   = article.toString(),
         name      = name,

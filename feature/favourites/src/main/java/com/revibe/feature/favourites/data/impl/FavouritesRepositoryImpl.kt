@@ -12,8 +12,8 @@ class FavouritesRepositoryImpl @Inject constructor(
     private val apiService: FavouritesApiService
 ) : FavouritesRepository {
 
-    override suspend fun getFavourites(): List<FavouriteProduct> {
-        val response = apiService.getFavourites()
+    override suspend fun getFavourites(userId: String): List<FavouriteProduct> {
+        val response = apiService.getFavourites(userId)
 
         if (response.isSuccessful) {
             return response.body()!!.map { it.toDomain() }
@@ -29,8 +29,8 @@ class FavouritesRepositoryImpl @Inject constructor(
         throw Exception(errorMessage)
     }
 
-    override suspend fun removeFromFavourites(article: UUID) {
-        val response = apiService.removeFromFavourites(article)
+    override suspend fun removeFromFavourites(userId: String, article: UUID) {
+        val response = apiService.removeFromFavourites(userId, article.toString())
 
         if (!response.isSuccessful) {
             val errorBody = response.errorBody()?.string()
@@ -43,14 +43,20 @@ class FavouritesRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun isFavourite(userId: String, article: UUID): Boolean {
+        val response = apiService.isFavourite(userId, article.toString())
+        if (response.isSuccessful) return response.body() ?: false
+        throw Exception("Ошибка ${response.code()}")
+    }
+
     private fun FavouriteDto.toDomain() = FavouriteProduct(
-        article  = article,
-        name     = name,
-        price    = price,
+        article = article,
+        name = name,
+        price = price,
         imageUrl = imageUrl,
-        gender   = gender,
-        color    = color,
-        brand    = brand,
-        size     = size
+        gender = gender,
+        color = color,
+        brand = brand,
+        size = size
     )
 }

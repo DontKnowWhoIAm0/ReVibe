@@ -1,6 +1,7 @@
 package com.revibe.feature.favourites.di
 
 import com.revibe.feature.favourites.presentation.FavouritesViewModel
+import dagger.BindsInstance
 import dagger.Component
 import javax.inject.Singleton
 
@@ -15,6 +16,6 @@ interface FavouritesComponent {
 
     @Component.Factory
     interface Factory {
-        fun create(dependencies: FavouritesDependencies): FavouritesComponent
+        fun create(dependencies: FavouritesDependencies, @BindsInstance userId: String): FavouritesComponent
     }
 }

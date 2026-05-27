@@ -4,9 +4,8 @@ import com.revibe.feature.favourites.data.FavouritesRepository
 import java.util.UUID
 import javax.inject.Inject
 
-class RemoveFromFavouritesUseCase @Inject constructor(
+class IsFavouriteUseCase @Inject constructor(
     private val repository: FavouritesRepository
 ) {
-    suspend operator fun invoke(userId: String, article: UUID) =
-        repository.removeFromFavourites(userId, article)
+    suspend operator fun invoke(userId: String, article: UUID): Boolean = repository.isFavourite(userId, article)
 }

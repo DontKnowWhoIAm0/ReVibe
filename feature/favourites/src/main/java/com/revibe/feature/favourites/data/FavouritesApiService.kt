@@ -5,13 +5,16 @@ import retrofit2.Response
 import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Path
-import java.util.UUID
+import retrofit2.http.Query
 
 interface FavouritesApiService {
 
-    @GET("api/favourites")
-    suspend fun getFavourites(): Response<List<FavouriteDto>>
+    @GET("api/favorites")
+    suspend fun getFavourites(@Query("userId") userId: String): Response<List<FavouriteDto>>
 
-    @DELETE("api/favourites/{article}")
-    suspend fun removeFromFavourites(@Path("article") article: UUID): Response<Unit>
+    @DELETE("api/favorites/{article}")
+    suspend fun removeFromFavourites(@Query("userId") userId: String, @Path("article") article: String): Response<Unit>
+
+    @GET("api/favorites/check")
+    suspend fun isFavourite(@Query("userId") userId: String, @Query("productId") productId: String): Response<Boolean>
 }

@@ -12,7 +12,8 @@ import javax.inject.Inject
 
 class FavouritesViewModel @Inject constructor(
     private val getFavouritesUseCase: GetFavouritesUseCase,
-    private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase
+    private val removeFromFavouritesUseCase: RemoveFromFavouritesUseCase,
+    private val userId: String
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(FavouritesUiState())
@@ -27,7 +28,7 @@ class FavouritesViewModel @Inject constructor(
 
         viewModelScope.launch {
             try {
-                val products = getFavouritesUseCase()
+                val products = getFavouritesUseCase(userId)
                 _state.value = _state.value.copy(isLoading = false, products = products)
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
@@ -41,7 +42,7 @@ class FavouritesViewModel @Inject constructor(
     fun removeFromFavourites(article: UUID) {
         viewModelScope.launch {
             try {
-                removeFromFavouritesUseCase(article)
+                removeFromFavouritesUseCase(userId, article)
                 _state.value = _state.value.copy(
                     products = _state.value.products.filter { it.article != article }
                 )

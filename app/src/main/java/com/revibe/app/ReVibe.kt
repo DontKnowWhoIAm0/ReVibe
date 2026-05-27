@@ -5,6 +5,7 @@ import com.revibe.app.di.AppComponent
 import com.revibe.app.di.AppModule
 import com.revibe.app.di.DaggerAppComponent
 import com.revibe.core.data.di.DataStoreModule
+import com.revibe.core.data.local.TokenDataStore
 import com.revibe.core.network.di.DaggerNetworkComponent
 import com.revibe.core.network.di.NetworkComponent
 
@@ -13,6 +14,7 @@ class ReVibe : Application() {
     lateinit var appComponent: AppComponent
     lateinit var networkComponent: NetworkComponent
     lateinit var dataStoreModule: DataStoreModule
+    val tokenDataStore get() = networkComponent.tokenDataStore()
 
     override fun onCreate() {
         super.onCreate()

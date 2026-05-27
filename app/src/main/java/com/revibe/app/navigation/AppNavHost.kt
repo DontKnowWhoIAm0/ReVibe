@@ -23,6 +23,7 @@ import com.revibe.feature.favourites.presentation.components.FavouritesScreen
 import com.revibe.feature.product_details.di.DaggerProductDetailsComponent
 import com.revibe.feature.product_details.di.ProductDetailsDependencies
 import com.revibe.feature.registration.di.RegistrationDependencies
+import kotlinx.coroutines.runBlocking
 
 @Composable
 fun AppNavHost(
@@ -81,18 +82,22 @@ fun AppNavHost(
         }
 
         composable(AppScreens.Catalog.route) {
+            val userId = remember {
+                runBlocking { app.tokenDataStore.getUserId() ?: "" }
+            }
+
             val catalogViewModel = remember {
                 DaggerCatalogComponent.factory()
                     .create(object : CatalogDependencies {
                         override fun retrofit() = app.networkComponent.retrofit()
-                    })
+                    }, userId = userId)
                     .catalogViewModel()
             }
 
             CatalogScreen(
                 viewModel = catalogViewModel,
                 onProductClick = { product ->
-                    navController.navigate(AppScreens.ProductDetails.createRoute(product.article.toString()))
+                    navController.navigate(AppScreens.ProductDetails.createRoute(product.article.toString(), false))
                 },
                 onFavoriteClick = { /* TODO */ },
                 onSearchClick = { /* TODO */ },
@@ -102,6 +107,10 @@ fun AppNavHost(
 
         composable(AppScreens.ProductDetails.route) { backStackEntry ->
             val article = backStackEntry.arguments?.getString("article") ?: return@composable
+            val isFavourite = backStackEntry.arguments?.getString("isFavourite")?.toBooleanStrictOrNull() ?: false
+            val userId = remember {
+                runBlocking { app.tokenDataStore.getUserId() ?: "" }
+            }
 
             val viewModel = remember(article) {
                 DaggerProductDetailsComponent.factory()
@@ -109,7 +118,9 @@ fun AppNavHost(
                         dependencies = object : ProductDetailsDependencies {
                             override fun retrofit() = app.networkComponent.retrofit()
                         },
-                        article = article
+                        article = article,
+                        userId = userId,
+                        isFavourite = isFavourite
                     )
                     .productDetailsViewModel()
             }
@@ -119,16 +130,22 @@ fun AppNavHost(
                 onBackClick = { navController.popBackStack() },
                 onCreateOutfitClick = { /* TODO */ },
                 onViewOutfitClick = { /* TODO */ },
-                onFavoriteClick = { /* TODO */ }
+                onFavoriteClick = { viewModel.toggleFavourite() }
             )
         }
 
         composable(AppScreens.Favourites.route) {
+            val userId = remember {
+                runBlocking { app.tokenDataStore.getUserId() ?: "" }
+            }
+
             val favouritesViewModel = remember {
                 DaggerFavouritesComponent.factory()
                     .create(object : FavouritesDependencies {
                         override fun retrofit() = app.networkComponent.retrofit()
-                    })
+                    },
+                        userId = userId
+                    )
                     .favouritesViewModel()
             }
 
@@ -136,7 +153,7 @@ fun AppNavHost(
                 viewModel = favouritesViewModel,
                 onProductClick = { product ->
                     navController.navigate(
-                        AppScreens.ProductDetails.createRoute(product.article.toString())
+                        AppScreens.ProductDetails.createRoute(product.article.toString(), true)
                     )
                 },
                 onCartClick = { /* TODO */ }

@@ -2,6 +2,7 @@ package com.revibe.feature.catalog.data.impl
 
 import com.revibe.feature.catalog.data.CatalogApiService
 import com.revibe.feature.catalog.data.CatalogRepository
+import com.revibe.feature.catalog.data.dto.FavouriteArticleDto
 import com.revibe.feature.catalog.data.dto.ProductDto
 import com.revibe.feature.catalog.domain.model.Product
 import org.json.JSONObject
@@ -28,14 +29,26 @@ class CatalogRepositoryImpl @Inject constructor(
         throw Exception(errorMessage)
     }
 
+    override suspend fun getFavourites(userId: String): List<FavouriteArticleDto> {
+        val response = apiService.getFavourites(userId)
+        if (response.isSuccessful) return response.body() ?: emptyList()
+        val errorBody = response.errorBody()?.string()
+        val errorMessage = try {
+            JSONObject(errorBody ?: "").getString("error")
+        } catch (e: Exception) {
+            "Ошибка ${response.code()}"
+        }
+        throw Exception(errorMessage)
+    }
+
     private fun ProductDto.toDomain() = Product(
-        article  = article,
-        name     = name,
-        price    = price,
+        article = article,
+        name = name,
+        price = price,
         imageUrl = imageUrl,
-        gender   = gender,
-        color    = color,
-        brand    = brand,
-        size     = size
+        gender = gender,
+        color = color,
+        brand = brand,
+        size = size
     )
 }

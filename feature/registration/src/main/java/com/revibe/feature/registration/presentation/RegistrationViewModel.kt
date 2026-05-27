@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.revibe.core.data.local.TokenDataStore
 import com.revibe.feature.registration.domain.model.RegisterRequest
+import com.revibe.feature.registration.domain.usecase.GetMeUseCase
 import com.revibe.feature.registration.domain.usecase.RegisterUserUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,6 +13,7 @@ import javax.inject.Inject
 
 class RegistrationViewModel @Inject constructor(
     private val registerUserUseCase: RegisterUserUseCase,
+    private val getMeUseCase: GetMeUseCase,
     private val tokenDataStore: TokenDataStore
 ) : ViewModel() {
 
@@ -90,6 +92,9 @@ class RegistrationViewModel @Inject constructor(
                     )
                 )
                 tokenDataStore.saveToken(response.token)
+
+                val me = getMeUseCase()
+                tokenDataStore.saveUserId(me.id)
 
                 _state.value = _state.value.copy(isLoading = false, success = true)
             } catch (e: Exception) {
