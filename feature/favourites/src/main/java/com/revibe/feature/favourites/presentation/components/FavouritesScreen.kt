@@ -81,6 +81,7 @@ fun FavouritesScreen(
                                 price = "${product.price} ₽",
                                 imageUrl = product.imageUrl,
                                 isFavourite = true,
+                                isInCart = false,
                                 onClick = { onProductClick(product) },
                                 onFavoriteClick = { viewModel.removeFromFavourites(product.article) },
                                 onCartClick = { onCartClick(product) }

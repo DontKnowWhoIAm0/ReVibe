@@ -9,6 +9,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.unit.dp
 
@@ -35,6 +36,7 @@ fun IconActionButton(
         Icon(
             painter = icon,
             modifier = Modifier.size(30.dp),
+            tint = Color.Unspecified,
             contentDescription = null
         )
     }

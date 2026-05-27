@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,6 +24,7 @@ fun ProductCard(
     price: String,
     imageUrl: String?,
     isFavourite: Boolean = false,
+    isInCart: Boolean = false,
     onClick: () -> Unit = {},
     onFavoriteClick: () -> Unit = {},
     onCartClick: () -> Unit = {}
@@ -55,10 +57,10 @@ fun ProductCard(
 
             Icon(
                 painter = painterResource(
-                    id = if (isFavourite) R.drawable.favourite else R.drawable.add_to_favourite
+                    id = if (isFavourite) R.drawable.favourite_active else R.drawable.add_to_favourite
                 ),
                 contentDescription = null,
-                tint = colors.outline,
+                tint = Color.Unspecified,
                 modifier = Modifier
                     .padding(8.dp)
                     .size(24.dp)
@@ -89,10 +91,13 @@ fun ProductCard(
             }
 
             Icon(
-                painter = painterResource(id = R.drawable.add_to_cart),
+                painter = painterResource(id = if (isInCart) R.drawable.delete_from_cart else R.drawable.add_to_cart),
                 contentDescription = null,
-                tint = colors.primary,
-                modifier = Modifier.size(22.dp)
+                tint = Color.Unspecified,
+                modifier = Modifier
+                    .padding(8.dp)
+                    .size(24.dp)
+                    .clickable { onCartClick() }
             )
         }
     }

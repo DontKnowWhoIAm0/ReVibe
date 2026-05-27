@@ -8,10 +8,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.revibe.core.ui.R as CoreR
@@ -21,9 +21,6 @@ fun CatalogTopBar(
     onSearchClick: () -> Unit = {},
     onFilterClick: () -> Unit = {}
 ) {
-    val colors = MaterialTheme.colorScheme
-    val typography = MaterialTheme.typography
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -34,8 +31,7 @@ fun CatalogTopBar(
         Image(
             painter = painterResource(id = CoreR.drawable.small_logo),
             contentDescription = null,
-            modifier = Modifier
-                .size(40.dp)
+            modifier = Modifier.size(80.dp)
         )
 
 
@@ -45,7 +41,8 @@ fun CatalogTopBar(
             Icon(
                 painter = painterResource(id = CoreR.drawable.search),
                 contentDescription = "Search",
-                tint = colors.primary
+                tint = Color.Unspecified,
+                modifier = Modifier.size(32.dp)
             )
         }
 
@@ -53,7 +50,8 @@ fun CatalogTopBar(
             Icon(
                 painter = painterResource(id = CoreR.drawable.filters),
                 contentDescription = "Filter",
-                tint = colors.primary
+                tint = Color.Unspecified,
+                modifier = Modifier.size(32.dp)
             )
         }
     }
