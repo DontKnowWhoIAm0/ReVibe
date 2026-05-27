@@ -13,7 +13,7 @@ interface FavouritesApiService {
     suspend fun getFavourites(@Query("userId") userId: String): Response<List<FavouriteDto>>
 
     @DELETE("api/favorites/{article}")
-    suspend fun removeFromFavourites(@Query("userId") userId: String, @Path("article") article: String): Response<Unit>
+    suspend fun removeFromFavourites(@Path("article") article: String, @Query("userId") userId: String): Response<Unit>
 
     @GET("api/favorites/check")
     suspend fun isFavourite(@Query("userId") userId: String, @Query("productId") productId: String): Response<Boolean>

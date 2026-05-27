@@ -41,6 +41,16 @@ class CatalogRepositoryImpl @Inject constructor(
         throw Exception(errorMessage)
     }
 
+    override suspend fun addFavourite(userId: String, article: String) {
+        val response = apiService.addToFavourites(userId, article)
+        if (!response.isSuccessful) throw Exception("Ошибка ${response.code()}")
+    }
+
+    override suspend fun removeFavourite(userId: String, article: String) {
+        val response = apiService.removeFromFavourites(article, userId)
+        if (!response.isSuccessful) throw Exception("Ошибка ${response.code()}")
+    }
+
     private fun ProductDto.toDomain() = Product(
         article = article,
         name = name,

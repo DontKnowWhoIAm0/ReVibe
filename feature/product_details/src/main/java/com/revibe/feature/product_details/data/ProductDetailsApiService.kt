@@ -16,7 +16,7 @@ interface ProductDetailsApiService {
     suspend fun addToFavourites(@Query("userId") userId: String, @Query("productId") productId: String): Response<Unit>
 
     @DELETE("api/favorites/{productId}")
-    suspend fun removeFromFavourites(@Query("userId") userId: String, @Path("productId") productId: String): Response<Unit>
+    suspend fun removeFromFavourites(@Path("productId") productId: String, @Query("userId") userId: String): Response<Unit>
 
     @GET("api/favorites/check")
     suspend fun isFavourite(@Query("userId") userId: String, @Query("productId") productId: String): Response<Boolean>

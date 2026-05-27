@@ -99,7 +99,6 @@ fun AppNavHost(
                 onProductClick = { product ->
                     navController.navigate(AppScreens.ProductDetails.createRoute(product.article.toString(), false))
                 },
-                onFavoriteClick = { /* TODO */ },
                 onSearchClick = { /* TODO */ },
                 onFilterClick = { /* TODO */ }
             )

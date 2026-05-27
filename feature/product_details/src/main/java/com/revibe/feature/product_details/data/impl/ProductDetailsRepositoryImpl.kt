@@ -42,7 +42,7 @@ class ProductDetailsRepositoryImpl @Inject constructor(
     }
 
     override suspend fun removeFromFavourites(userId: String, productId: String) {
-        val response = apiService.removeFromFavourites(userId, productId)
+        val response = apiService.removeFromFavourites(productId, userId)
         if (!response.isSuccessful) {
             val errorBody = response.errorBody()?.string()
             val errorMessage = try {
