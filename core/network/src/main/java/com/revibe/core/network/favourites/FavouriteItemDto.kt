@@ -1,8 +1,8 @@
-package com.revibe.feature.favourites.data.dto
+package com.revibe.core.network.favourites
 
 import java.util.UUID
 
-data class FavouriteDto(
+data class FavouriteItemDto(
     val article: UUID,
     val name: String,
     val price: Int,

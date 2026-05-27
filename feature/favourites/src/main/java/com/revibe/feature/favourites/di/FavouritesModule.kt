@@ -1,6 +1,6 @@
 package com.revibe.feature.favourites.di
 
-import com.revibe.feature.favourites.data.FavouritesApiService
+import com.revibe.core.network.favourites.FavouritesApiService
 import com.revibe.feature.favourites.data.FavouritesRepository
 import com.revibe.feature.favourites.data.impl.FavouritesRepositoryImpl
 import dagger.Module
