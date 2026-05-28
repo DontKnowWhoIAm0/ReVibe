@@ -2,6 +2,7 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.kapt)
 }
 
 android {
@@ -33,11 +34,10 @@ android {
 
 dependencies {
     implementation(project(":core:ui"))
+    implementation(project(":feature:catalog"))
+    implementation(project(":core:domain"))
 
-    implementation(platform("androidx.compose:compose-bom:2024.06.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation(libs.bundles.compose.ui)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

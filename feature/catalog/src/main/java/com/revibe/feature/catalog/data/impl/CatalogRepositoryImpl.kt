@@ -58,6 +58,8 @@ class CatalogRepositoryImpl @Inject constructor(
         gender = gender,
         color = color,
         brand = brand,
-        size = size
+        size = size,
+        condition = condition,
+        category = category
     )
 }

@@ -1,7 +1,14 @@
 package com.revibe.app.navigation
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -17,9 +24,11 @@ import com.revibe.feature.product_details.presentation.components.ProductScreen
 import com.revibe.feature.registration.di.DaggerRegistrationComponent
 import com.revibe.feature.login.di.DaggerLoginComponent
 import com.revibe.feature.catalog.di.DaggerCatalogComponent
+import com.revibe.feature.catalog.presentation.FiltersState
 import com.revibe.feature.favourites.di.DaggerFavouritesComponent
 import com.revibe.feature.favourites.di.FavouritesDependencies
 import com.revibe.feature.favourites.presentation.components.FavouritesScreen
+import com.revibe.feature.filters.presentation.components.FiltersScreen
 import com.revibe.feature.product_details.di.DaggerProductDetailsComponent
 import com.revibe.feature.product_details.di.ProductDetailsDependencies
 import com.revibe.feature.registration.di.RegistrationDependencies
@@ -81,10 +90,11 @@ fun AppNavHost(
             )
         }
 
-        composable(AppScreens.Catalog.route) {
+        composable(AppScreens.Catalog.route) { backStackEntry ->
             val userId = remember {
                 runBlocking { app.tokenDataStore.getUserId() ?: "" }
             }
+
 
             val catalogViewModel = remember {
                 DaggerCatalogComponent.factory()
@@ -94,13 +104,21 @@ fun AppNavHost(
                     .catalogViewModel()
             }
 
+            val filters = backStackEntry.savedStateHandle
+                .getStateFlow<FiltersState?>("filters", null)
+                .collectAsState()
+
+            LaunchedEffect(filters.value) {
+                filters.value?.let { catalogViewModel.applyFilters(it) }
+            }
+
             CatalogScreen(
                 viewModel = catalogViewModel,
                 onProductClick = { product ->
                     navController.navigate(AppScreens.ProductDetails.createRoute(product.article.toString(), false))
                 },
                 onSearchClick = { /* TODO */ },
-                onFilterClick = { /* TODO */ }
+                onFilterClick = { navController.navigate(AppScreens.Filters.route) }
             )
         }
 
@@ -158,5 +176,48 @@ fun AppNavHost(
                 onCartClick = { /* TODO */ }
             )
         }
+
+        composable(AppScreens.Filters.route) {
+
+            val currentFilters = navController
+                .getBackStackEntry(AppScreens.Catalog.route)
+                .savedStateHandle
+                .get<FiltersState>("filters") ?: FiltersState()
+
+            FiltersScreen(
+                initial = currentFilters,
+                onBackClick = { navController.popBackStack() },
+                onApply = { filters ->
+                    navController.previousBackStackEntry ?.savedStateHandle ?.set("filters", filters)
+                    navController.popBackStack()
+                },
+                onReset = {
+                    navController.previousBackStackEntry ?.savedStateHandle ?.set("filters", FiltersState())
+                    navController.popBackStack()
+                }
+            )
+        }
+
+
+
+        composable(AppScreens.Cart.route) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Корзина — в разработке")
+            }
+        }
+
+        composable(AppScreens.Profile.route) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Text("Профиль — в разработке")
+            }
+        }
     }
 }
+
+

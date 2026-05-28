@@ -30,7 +30,7 @@ private data class BottomNavItem(
 fun BottomNavBar(navController: NavController) {
     val items = listOf(
         BottomNavItem(AppScreens.Catalog, R.drawable.catalog, R.drawable.catalog_active, "Каталог"),
-        BottomNavItem(AppScreens.Favourites, R.drawable.favourite_active, R.drawable.add_to_favourite, "Избранное"),
+        BottomNavItem(AppScreens.Favourites, R.drawable.favourite_full, R.drawable.favourite_active, "Избранное"),
         BottomNavItem(AppScreens.Cart, R.drawable.cart, R.drawable.cart_active, "Корзина"),
         BottomNavItem(AppScreens.Profile, R.drawable.profile, R.drawable.profile_active, "Профиль"),
     )

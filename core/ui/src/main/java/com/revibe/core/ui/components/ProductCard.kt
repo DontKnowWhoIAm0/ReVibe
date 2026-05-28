@@ -57,7 +57,7 @@ fun ProductCard(
 
             Icon(
                 painter = painterResource(
-                    id = if (isFavourite) R.drawable.favourite_active else R.drawable.add_to_favourite
+                    id = if (isFavourite) R.drawable.favourite_full else R.drawable.add_to_favourite
                 ),
                 contentDescription = null,
                 tint = Color.Unspecified,

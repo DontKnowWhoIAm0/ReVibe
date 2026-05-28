@@ -153,7 +153,7 @@ fun ProductScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp)
             ) {
                 IconActionButton(
-                    icon = painterResource(if (state.isFavourite) CoreR.drawable.favourite_active else CoreR.drawable.add_to_favourite),
+                    icon = painterResource(if (state.isFavourite) CoreR.drawable.favourite_full else CoreR.drawable.add_to_favourite),
                     onClick = onFavoriteClick
                 )
 
