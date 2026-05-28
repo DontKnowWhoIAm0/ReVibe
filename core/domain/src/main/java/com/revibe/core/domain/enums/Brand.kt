@@ -16,7 +16,6 @@ enum class Brand(val displayName: String) {
     ALEXANDER_MCQUEEN("Alexander McQueen"),
     DOLCE_GABBANA("Dolce & Gabbana"),
     TOM_FORD("Tom Ford"),
-
     MICHAEL_KORS("Michael Kors"),
     RALPH_LAUREN("Ralph Lauren"),
     CALVIN_KLEIN("Calvin Klein"),
@@ -33,7 +32,6 @@ enum class Brand(val displayName: String) {
     BERSHKA("Bershka"),
     PULL_AND_BEAR("Pull & Bear"),
     STRADIVARIUS("Stradivarius"),
-
     NIKE("Nike"),
     ADIDAS("Adidas"),
     PUMA("Puma"),

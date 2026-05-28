@@ -10,5 +10,7 @@ data class Product(
     val gender: String,
     val color: String,
     val brand: String,
-    val size: String
+    val size: String,
+    val condition: String,
+    val category: String
 )

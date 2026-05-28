@@ -11,4 +11,6 @@ sealed class AppScreens(val route: String) {
         fun createRoute(article: String, isFavourite: Boolean) =
             "product_details/$article/$isFavourite"
     }
+
+    object Filters : AppScreens("filters")
 }

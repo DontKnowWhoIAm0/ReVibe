@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.revibe.feature.catalog.domain.model.Product
 import com.revibe.feature.catalog.domain.usecase.AddCatalogFavouriteUseCase
+import com.revibe.feature.catalog.domain.usecase.FilterProductsUseCase
 import com.revibe.feature.catalog.domain.usecase.GetFavouriteArticlesUseCase
 import com.revibe.feature.catalog.domain.usecase.GetProductsUseCase
 import com.revibe.feature.catalog.domain.usecase.RemoveCatalogFavouriteUseCase
@@ -17,6 +18,7 @@ class CatalogViewModel @Inject constructor(
     private val getFavouriteArticlesUseCase: GetFavouriteArticlesUseCase,
     private val addFavouriteUseCase: AddCatalogFavouriteUseCase,
     private val removeFavouriteUseCase: RemoveCatalogFavouriteUseCase,
+    private val filterProductsUseCase: FilterProductsUseCase,
     private val userId: String
 ) : ViewModel() {
 
@@ -39,7 +41,8 @@ class CatalogViewModel @Inject constructor(
                     emptySet()
                 }
 
-                _state.value = _state.value.copy(isLoading = false, products = products, favouriteArticles = favouriteArticles)
+                val filtered = filterProductsUseCase(products, _state.value.filters)
+                _state.value = _state.value.copy(isLoading = false, allProducts = products, products = filtered, favouriteArticles = favouriteArticles)
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
                     isLoading = false,
@@ -47,6 +50,18 @@ class CatalogViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun applyFilters(filters: FiltersState) {
+        val filtered = filterProductsUseCase(_state.value.allProducts, filters)
+        _state.value = _state.value.copy(filters = filters, products = filtered)
+    }
+
+    fun resetFilters() {
+        _state.value = _state.value.copy(
+            filters = FiltersState(),
+            products = _state.value.allProducts
+        )
     }
 
     fun toggleFavourite(product: Product) {
