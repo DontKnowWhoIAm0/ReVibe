@@ -13,4 +13,5 @@ sealed class AppScreens(val route: String) {
     }
 
     object Filters : AppScreens("filters")
+    object Search : AppScreens("search")
 }
