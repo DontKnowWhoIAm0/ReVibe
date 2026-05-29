@@ -13,6 +13,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import com.revibe.core.db.dao.CartDao
+import com.revibe.core.db.entity.CartItemEntity
 
 class CatalogViewModel @Inject constructor(
     private val getProductsUseCase: GetProductsUseCase,
@@ -21,7 +23,8 @@ class CatalogViewModel @Inject constructor(
     private val removeFavouriteUseCase: RemoveCatalogFavouriteUseCase,
     private val filterProductsUseCase: FilterProductsUseCase,
     private val searchProductsUseCase: SearchProductsUseCase,
-    private val userId: String
+    private val userId: String,
+    private val cartDao: CartDao
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(CatalogUiState())
@@ -103,5 +106,24 @@ class CatalogViewModel @Inject constructor(
         val afterFilter = filterProductsUseCase(_state.value.allProducts, _state.value.filters)
         val afterSearch = searchProductsUseCase(afterFilter, query)
         _state.value = _state.value.copy(searchQuery = query, products = afterSearch)
+    }
+
+    fun addToCart(product: Product) {
+        viewModelScope.launch {
+            cartDao.insert(
+                CartItemEntity(
+                    article = product.article.toString(),
+                    name = product.name,
+                    price = product.price,
+                    imageUrl = product.imageUrl,
+                    brand = product.brand,
+                    size = product.size,
+                    category = product.category,
+                    condition = product.condition,
+                    branchId = product.branchId,
+                    branchAddress = product.branchAddress
+                )
+            )
+        }
     }
 }

@@ -1,5 +1,8 @@
 package com.revibe.feature.catalog.di
 
+import android.content.Context
+import com.revibe.core.db.ReVibeDatabase
+import com.revibe.core.db.dao.CartDao
 import com.revibe.core.network.favourites.FavouritesApiService
 import com.revibe.feature.catalog.data.CatalogApiService
 import com.revibe.feature.catalog.data.CatalogRepository
@@ -21,4 +24,8 @@ object CatalogModule {
     @Provides
     fun provideFavouritesApiService(retrofit: Retrofit): FavouritesApiService =
         retrofit.create(FavouritesApiService::class.java)
+
+    @Provides
+    fun provideCartDao(context: Context): CartDao =
+        ReVibeDatabase.getInstance(context).cartDao()
 }

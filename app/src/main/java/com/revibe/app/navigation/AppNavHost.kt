@@ -15,7 +15,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.revibe.app.ReVibe
 import com.revibe.core.data.di.DataStoreModule
+import com.revibe.core.db.ReVibeDatabase
 import com.revibe.core.navigation.AppScreens
+import com.revibe.feature.cart.di.CartDependencies
+import com.revibe.feature.cart.presentation.components.CartScreen
 import com.revibe.feature.catalog.di.CatalogDependencies
 import com.revibe.feature.catalog.presentation.components.CatalogScreen
 import com.revibe.feature.login.presentation.components.LoginScreen
@@ -49,9 +52,14 @@ fun AppNavHost(
         DaggerCatalogComponent.factory()
             .create(object : CatalogDependencies {
                 override fun retrofit() = app.networkComponent.retrofit()
+                override fun context() = app
             }, userId = userId)
             .catalogViewModel()
     }
+
+    val db = remember { ReVibeDatabase.getInstance(app) }
+
+    val cartDao = remember { db.cartDao() }
 
     NavHost(
         navController = navController,
@@ -82,6 +90,7 @@ fun AppNavHost(
         }
 
         composable(AppScreens.Registration.route) {
+
 
             val registrationViewModel = remember {
                 DaggerRegistrationComponent.factory()
@@ -122,6 +131,7 @@ fun AppNavHost(
                 onProductClick = { product ->
                     navController.navigate(AppScreens.ProductDetails.createRoute(product.article.toString(), false))
                 },
+                onCartClick = { product -> catalogViewModel.addToCart(product) },
                 onSearchClick = { navController.navigate(AppScreens.Search.route) },
                 onFilterClick = { navController.navigate(AppScreens.Filters.route) }
             )
@@ -184,6 +194,7 @@ fun AppNavHost(
 
         composable(AppScreens.Filters.route) {
 
+
             val currentFilters = navController
                 .getBackStackEntry(AppScreens.Catalog.route)
                 .savedStateHandle
@@ -221,16 +232,6 @@ fun AppNavHost(
             )
         }
 
-
-        composable(AppScreens.Cart.route) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("Корзина — в разработке")
-            }
-        }
-
         composable(AppScreens.Profile.route) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -238,6 +239,31 @@ fun AppNavHost(
             ) {
                 Text("Профиль — в разработке")
             }
+        }
+
+        composable(AppScreens.Cart.route) {
+            val userId = remember {
+                runBlocking { app.tokenDataStore.getUserId() ?: "" }
+            }
+
+            val cartViewModel = remember {
+                DaggerCartComponent.factory()
+                    .create(
+                        dependencies = object : com.revibe.feature.cart.di.CartDependencies {
+                            override fun retrofit() = app.networkComponent.retrofit()
+                            override fun context() = app
+                        },
+                        userId = userId
+                    )
+                    .cartViewModel()
+            }
+
+            CartScreen(
+                viewModel = cartViewModel,
+                onProductClick = { article ->
+                    navController.navigate(AppScreens.ProductDetails.createRoute(article, false))
+                }
+            )
         }
     }
 }

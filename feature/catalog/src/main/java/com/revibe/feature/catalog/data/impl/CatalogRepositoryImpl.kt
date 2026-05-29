@@ -60,6 +60,8 @@ class CatalogRepositoryImpl @Inject constructor(
         brand = brand,
         size = size,
         condition = condition,
-        category = category
+        category = category,
+        branchId = branch?.id ?: "",
+        branchAddress = branch?.address ?: ""
     )
 }
