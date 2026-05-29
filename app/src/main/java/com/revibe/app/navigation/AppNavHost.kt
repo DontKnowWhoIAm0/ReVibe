@@ -6,6 +6,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,6 +30,7 @@ import com.revibe.feature.favourites.di.DaggerFavouritesComponent
 import com.revibe.feature.favourites.di.FavouritesDependencies
 import com.revibe.feature.favourites.presentation.components.FavouritesScreen
 import com.revibe.feature.filters.presentation.components.FiltersScreen
+import com.revibe.feature.search.presentation.components.SearchScreen
 import com.revibe.feature.product_details.di.DaggerProductDetailsComponent
 import com.revibe.feature.product_details.di.ProductDetailsDependencies
 import com.revibe.feature.registration.di.RegistrationDependencies
@@ -39,6 +41,18 @@ fun AppNavHost(
     navController: NavHostController,
     app: ReVibe
 ) {
+    val userId = remember {
+        runBlocking { app.tokenDataStore.getUserId() ?: "" }
+    }
+
+    val catalogViewModel = remember {
+        DaggerCatalogComponent.factory()
+            .create(object : CatalogDependencies {
+                override fun retrofit() = app.networkComponent.retrofit()
+            }, userId = userId)
+            .catalogViewModel()
+    }
+
     NavHost(
         navController = navController,
         startDestination = AppScreens.Registration.route
@@ -79,6 +93,7 @@ fun AppNavHost(
                     .registrationViewModel()
             }
 
+
             RegistrationScreen(
                 viewModel = registrationViewModel,
                 onLoginClick = { navController.navigate(AppScreens.Login.route) },
@@ -91,33 +106,23 @@ fun AppNavHost(
         }
 
         composable(AppScreens.Catalog.route) { backStackEntry ->
-            val userId = remember {
-                runBlocking { app.tokenDataStore.getUserId() ?: "" }
-            }
-
-
-            val catalogViewModel = remember {
-                DaggerCatalogComponent.factory()
-                    .create(object : CatalogDependencies {
-                        override fun retrofit() = app.networkComponent.retrofit()
-                    }, userId = userId)
-                    .catalogViewModel()
-            }
 
             val filters = backStackEntry.savedStateHandle
                 .getStateFlow<FiltersState?>("filters", null)
                 .collectAsState()
 
+
             LaunchedEffect(filters.value) {
                 filters.value?.let { catalogViewModel.applyFilters(it) }
             }
+
 
             CatalogScreen(
                 viewModel = catalogViewModel,
                 onProductClick = { product ->
                     navController.navigate(AppScreens.ProductDetails.createRoute(product.article.toString(), false))
                 },
-                onSearchClick = { /* TODO */ },
+                onSearchClick = { navController.navigate(AppScreens.Search.route) },
                 onFilterClick = { navController.navigate(AppScreens.Filters.route) }
             )
         }
@@ -184,6 +189,7 @@ fun AppNavHost(
                 .savedStateHandle
                 .get<FiltersState>("filters") ?: FiltersState()
 
+
             FiltersScreen(
                 initial = currentFilters,
                 onBackClick = { navController.popBackStack() },
@@ -198,6 +204,22 @@ fun AppNavHost(
             )
         }
 
+        composable(AppScreens.Search.route) {
+            val catalogState by catalogViewModel.state.collectAsState()
+
+            SearchScreen(
+                initialQuery = catalogState.searchQuery,
+                onBackClick = { navController.popBackStack() },
+                onApply = { query ->
+                    catalogViewModel.applySearch(query)
+                    navController.popBackStack()
+                },
+                onReset = {
+                    catalogViewModel.applySearch("")
+                    navController.popBackStack()
+                }
+            )
+        }
 
 
         composable(AppScreens.Cart.route) {
@@ -219,5 +241,3 @@ fun AppNavHost(
         }
     }
 }
-
-

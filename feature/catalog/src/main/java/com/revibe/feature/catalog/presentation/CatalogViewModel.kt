@@ -8,6 +8,7 @@ import com.revibe.feature.catalog.domain.usecase.FilterProductsUseCase
 import com.revibe.feature.catalog.domain.usecase.GetFavouriteArticlesUseCase
 import com.revibe.feature.catalog.domain.usecase.GetProductsUseCase
 import com.revibe.feature.catalog.domain.usecase.RemoveCatalogFavouriteUseCase
+import com.revibe.feature.catalog.domain.usecase.SearchProductsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -19,6 +20,7 @@ class CatalogViewModel @Inject constructor(
     private val addFavouriteUseCase: AddCatalogFavouriteUseCase,
     private val removeFavouriteUseCase: RemoveCatalogFavouriteUseCase,
     private val filterProductsUseCase: FilterProductsUseCase,
+    private val searchProductsUseCase: SearchProductsUseCase,
     private val userId: String
 ) : ViewModel() {
 
@@ -42,7 +44,12 @@ class CatalogViewModel @Inject constructor(
                 }
 
                 val filtered = filterProductsUseCase(products, _state.value.filters)
-                _state.value = _state.value.copy(isLoading = false, allProducts = products, products = filtered, favouriteArticles = favouriteArticles)
+                _state.value = _state.value.copy(
+                    isLoading = false,
+                    allProducts = products,
+                    products = filtered,
+                    favouriteArticles = favouriteArticles
+                )
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
                     isLoading = false,
@@ -54,7 +61,8 @@ class CatalogViewModel @Inject constructor(
 
     fun applyFilters(filters: FiltersState) {
         val filtered = filterProductsUseCase(_state.value.allProducts, filters)
-        _state.value = _state.value.copy(filters = filters, products = filtered)
+        val searched = searchProductsUseCase(filtered, _state.value.searchQuery)
+        _state.value = _state.value.copy(filters = filters, products = searched)
     }
 
     fun resetFilters() {
@@ -88,5 +96,12 @@ class CatalogViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+
+    fun applySearch(query: String) {
+        val afterFilter = filterProductsUseCase(_state.value.allProducts, _state.value.filters)
+        val afterSearch = searchProductsUseCase(afterFilter, query)
+        _state.value = _state.value.copy(searchQuery = query, products = afterSearch)
     }
 }

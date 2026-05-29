@@ -53,6 +53,7 @@ dependencies {
     implementation(project(":feature:product_details"))
     implementation(project(":feature:favourites"))
     implementation(project(":feature:filters"))
+    implementation(project(":feature:search"))
 
     implementation("androidx.navigation:navigation-compose:2.7.3")
     implementation(platform("androidx.compose:compose-bom:2024.06.00"))
