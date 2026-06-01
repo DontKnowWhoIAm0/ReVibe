@@ -12,5 +12,13 @@ data class ProductDto(
     val brand: String,
     val size: String,
     val condition: String,
-    val category: String
+    val category: String,
+    val branch: BranchDto?
+)
+
+data class BranchDto(
+    val id: String,
+    val name: String,
+    val city: String,
+    val address: String
 )

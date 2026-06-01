@@ -1,9 +1,9 @@
-package com.revibe.feature.catalog.di
+package com.revibe.feature.cart.di
 
 import android.content.Context
 import retrofit2.Retrofit
 
-interface CatalogDependencies {
+interface CartDependencies {
     fun retrofit(): Retrofit
     fun context(): Context
 }

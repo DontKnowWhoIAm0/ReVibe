@@ -54,6 +54,7 @@ dependencies {
     implementation(project(":feature:favourites"))
     implementation(project(":feature:filters"))
     implementation(project(":feature:search"))
+    implementation(project(":feature:cart"))
 
     implementation("androidx.navigation:navigation-compose:2.7.3")
     implementation(platform("androidx.compose:compose-bom:2024.06.00"))
@@ -64,6 +65,8 @@ dependencies {
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
     implementation(libs.bundles.retrofit)
+
+    implementation(libs.bundles.room)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
