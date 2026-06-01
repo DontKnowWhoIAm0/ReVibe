@@ -18,6 +18,7 @@ import com.revibe.core.data.di.DataStoreModule
 import com.revibe.core.db.ReVibeDatabase
 import com.revibe.core.navigation.AppScreens
 import com.revibe.feature.cart.di.CartDependencies
+import com.revibe.feature.cart.di.DaggerCartComponent
 import com.revibe.feature.cart.presentation.components.CartScreen
 import com.revibe.feature.catalog.di.CatalogDependencies
 import com.revibe.feature.catalog.presentation.components.CatalogScreen

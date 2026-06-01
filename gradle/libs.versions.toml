@@ -24,7 +24,7 @@ material3Android = "1.4.0"
 
 datastore = "1.1.1"
 
-room = "2.6.1"
+room = "2.7.1"
 
 
 [libraries]

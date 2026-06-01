@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kapt)
 }
 
@@ -29,8 +30,18 @@ android {
 }
 
 dependencies {
+    implementation(project(":core:db"))
+    implementation(project(":core:ui"))
+
     implementation(libs.bundles.room)
     kapt(libs.room.compiler)
+
+    implementation(libs.bundles.compose.ui)
+    implementation(libs.coil.compose)
+
+    implementation(libs.bundles.retrofit)
+    implementation(libs.dagger)
+    kapt(libs.dagger.compiler)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
