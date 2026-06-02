@@ -132,7 +132,6 @@ fun AppNavHost(
                 onProductClick = { product ->
                     navController.navigate(AppScreens.ProductDetails.createRoute(product.article.toString(), false))
                 },
-                onCartClick = { product -> catalogViewModel.addToCart(product) },
                 onSearchClick = { navController.navigate(AppScreens.Search.route) },
                 onFilterClick = { navController.navigate(AppScreens.Filters.route) }
             )
@@ -150,6 +149,7 @@ fun AppNavHost(
                     .create(
                         dependencies = object : ProductDetailsDependencies {
                             override fun retrofit() = app.networkComponent.retrofit()
+                            override fun context() = app
                         },
                         article = article,
                         userId = userId,
@@ -163,7 +163,8 @@ fun AppNavHost(
                 onBackClick = { navController.popBackStack() },
                 onCreateOutfitClick = { /* TODO */ },
                 onViewOutfitClick = { /* TODO */ },
-                onFavoriteClick = { viewModel.toggleFavourite() }
+                onFavoriteClick = { viewModel.toggleFavourite() },
+                onAddToCartClick = { viewModel.toggleCart() }
             )
         }
 

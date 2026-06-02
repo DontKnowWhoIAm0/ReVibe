@@ -2,6 +2,8 @@ package com.revibe.feature.product_details.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.revibe.core.db.dao.CartDao
+import com.revibe.core.db.entity.CartItemEntity
 import com.revibe.feature.product_details.di.ArticleId
 import com.revibe.feature.product_details.di.IsFavourite
 import com.revibe.feature.product_details.di.UserId
@@ -21,7 +23,8 @@ class ProductDetailsViewModel @Inject constructor(
     private val checkIsFavouriteUseCase: CheckIsFavouriteUseCase,
     @ArticleId private val article: String,
     @UserId private val userId: String,
-    @IsFavourite private val isFavourite: Boolean
+    @IsFavourite private val isFavourite: Boolean,
+    private val cartDao: CartDao
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(ProductUiState())
@@ -37,6 +40,7 @@ class ProductDetailsViewModel @Inject constructor(
             try {
                 val product = getProductUseCase(article)
                 val actualIsFavourite = checkIsFavouriteUseCase(userId, article)
+                val inCart = cartDao.isInCart(article)
                 _state.value = _state.value.copy(
                     isLoading = false,
                     article = product.article,
@@ -48,7 +52,8 @@ class ProductDetailsViewModel @Inject constructor(
                     gender = product.gender,
                     location = product.location,
                     imageUrl = product.imageUrl,
-                    isFavourite = actualIsFavourite
+                    isFavourite = actualIsFavourite,
+                    isInCart = inCart
                 )
             } catch (e: Exception) {
                 _state.value = _state.value.copy(
@@ -75,6 +80,44 @@ class ProductDetailsViewModel @Inject constructor(
                     isFavourite   = current,
                     favouriteError = e.message ?: "Не удалось обновить избранное"
                 )
+            }
+        }
+    }
+
+    fun toggleCart() {
+        val current = _state.value.isInCart
+        _state.value = _state.value.copy(isInCart = !current)
+
+        viewModelScope.launch {
+            try {
+
+                if (current) {
+
+                    cartDao.getAll().find { it.article == article }?.let { cartDao.delete(it) }
+
+                } else {
+
+                    val product = getProductUseCase(article)
+
+                    cartDao.insert(
+                        CartItemEntity(
+                            article = product.article,
+                            name = product.name,
+                            price = product.price,
+                            imageUrl = product.imageUrl,
+                            brand = product.brand,
+                            size = product.size,
+                            category = product.category ?: "",
+                            condition = product.condition,
+                            branchId = "",
+                            branchAddress = product.location
+                        )
+                    )
+                }
+
+            } catch (e: Exception) {
+                _state.value =
+                    _state.value.copy(isInCart = current)
             }
         }
     }

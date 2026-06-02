@@ -32,6 +32,16 @@ class CatalogViewModel @Inject constructor(
 
     init {
         loadProducts()
+
+        viewModelScope.launch {
+            cartDao.observeAll().collect { items ->
+                _state.value = _state.value.copy(
+                    cartArticles = items.map {
+                        java.util.UUID.fromString(it.article)
+                    }.toSet()
+                )
+            }
+        }
     }
 
     fun loadProducts() {
@@ -108,22 +118,39 @@ class CatalogViewModel @Inject constructor(
         _state.value = _state.value.copy(searchQuery = query, products = afterSearch)
     }
 
-    fun addToCart(product: Product) {
+    fun toggleCart(product: Product) {
         viewModelScope.launch {
-            cartDao.insert(
-                CartItemEntity(
-                    article = product.article.toString(),
-                    name = product.name,
-                    price = product.price,
-                    imageUrl = product.imageUrl,
-                    brand = product.brand,
-                    size = product.size,
-                    category = product.category,
-                    condition = product.condition,
-                    branchId = product.branchId,
-                    branchAddress = product.branchAddress
+
+            val isInCart =
+                product.article in _state.value.cartArticles
+
+            if (isInCart) {
+
+                cartDao.getAll()
+                    .find {
+                        it.article == product.article.toString()
+                    }
+                    ?.let {
+                        cartDao.delete(it)
+                    }
+
+            } else {
+
+                cartDao.insert(
+                    CartItemEntity(
+                        article = product.article.toString(),
+                        name = product.name,
+                        price = product.price,
+                        imageUrl = product.imageUrl,
+                        brand = product.brand,
+                        size = product.size,
+                        category = product.category,
+                        condition = product.condition,
+                        branchId = product.branchId,
+                        branchAddress = product.branchAddress
+                    )
                 )
-            )
+            }
         }
     }
 }

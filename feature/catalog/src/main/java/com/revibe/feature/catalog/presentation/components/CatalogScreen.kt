@@ -19,7 +19,6 @@ import com.revibe.feature.catalog.presentation.CatalogViewModel
 fun CatalogScreen(
     viewModel: CatalogViewModel,
     onProductClick: (Product) -> Unit = {},
-    onCartClick: (Product) -> Unit = {},
     onSearchClick: () -> Unit = {},
     onFilterClick: () -> Unit = {}
 ) {
@@ -80,11 +79,10 @@ fun CatalogScreen(
                                 price = "${product.price} ₽",
                                 imageUrl = product.imageUrl,
                                 isFavourite = product.article in state.favouriteArticles,
-                                isInCart = false,
-                                 onClick = { onProductClick(product) },
+                                isInCart = product.article in state.cartArticles,
+                                onClick = { onProductClick(product) },
                                 onFavoriteClick = { viewModel.toggleFavourite(product) },
-                                onCartClick = { onCartClick(product) }
-                            )
+                                onCartClick = { viewModel.toggleCart(product) }                            )
                         }
                     }
                 }

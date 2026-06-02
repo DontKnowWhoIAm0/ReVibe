@@ -1,5 +1,8 @@
 package com.revibe.feature.product_details.di
 
+import android.content.Context
+import com.revibe.core.db.ReVibeDatabase
+import com.revibe.core.db.dao.CartDao
 import com.revibe.core.network.favourites.FavouritesApiService
 import com.revibe.feature.product_details.data.ProductDetailsApiService
 import com.revibe.feature.product_details.data.ProductDetailsRepository
@@ -7,6 +10,7 @@ import com.revibe.feature.product_details.data.impl.ProductDetailsRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit
+import javax.inject.Singleton
 
 @Module
 object ProductDetailsModule {
@@ -21,4 +25,7 @@ object ProductDetailsModule {
     @Provides
     fun provideFavouritesApiService(retrofit: Retrofit): FavouritesApiService =
         retrofit.create(FavouritesApiService::class.java)
+
+    @Provides
+    fun provideCartDao(context: Context): CartDao = ReVibeDatabase.getInstance(context).cartDao()
 }

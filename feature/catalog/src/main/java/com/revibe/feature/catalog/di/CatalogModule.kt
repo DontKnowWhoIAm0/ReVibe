@@ -26,6 +26,5 @@ object CatalogModule {
         retrofit.create(FavouritesApiService::class.java)
 
     @Provides
-    fun provideCartDao(context: Context): CartDao =
-        ReVibeDatabase.getInstance(context).cartDao()
+    fun provideCartDao(context: Context): CartDao = ReVibeDatabase.getInstance(context).cartDao()
 }
