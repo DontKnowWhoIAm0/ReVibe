@@ -55,6 +55,7 @@ dependencies {
     implementation(project(":feature:filters"))
     implementation(project(":feature:search"))
     implementation(project(":feature:cart"))
+    implementation(project(":feature:profile"))
 
     implementation("androidx.navigation:navigation-compose:2.7.3")
     implementation(platform("androidx.compose:compose-bom:2024.06.00"))

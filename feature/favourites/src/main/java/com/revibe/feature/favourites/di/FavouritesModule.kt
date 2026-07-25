@@ -1,5 +1,8 @@
 package com.revibe.feature.favourites.di
 
+import android.content.Context
+import com.revibe.core.db.ReVibeDatabase
+import com.revibe.core.db.dao.CartDao
 import com.revibe.core.network.favourites.FavouritesApiService
 import com.revibe.feature.favourites.data.FavouritesRepository
 import com.revibe.feature.favourites.data.impl.FavouritesRepositoryImpl
@@ -16,4 +19,7 @@ object FavouritesModule {
 
     @Provides
     fun provideFavouritesRepository(impl: FavouritesRepositoryImpl): FavouritesRepository = impl
+
+    @Provides
+    fun provideCartDao(context: Context): CartDao = ReVibeDatabase.getInstance(context).cartDao()
 }

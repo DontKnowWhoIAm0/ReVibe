@@ -37,6 +37,9 @@ dependencies {
     implementation(project(":core:ui"))
     implementation(project(":core:db"))
 
+    implementation(libs.bundles.room)
+    kapt(libs.room.compiler)
+
     implementation(libs.bundles.retrofit)
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)

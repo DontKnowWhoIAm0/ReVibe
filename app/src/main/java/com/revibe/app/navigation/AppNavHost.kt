@@ -37,6 +37,7 @@ import com.revibe.feature.filters.presentation.components.FiltersScreen
 import com.revibe.feature.search.presentation.components.SearchScreen
 import com.revibe.feature.product_details.di.DaggerProductDetailsComponent
 import com.revibe.feature.product_details.di.ProductDetailsDependencies
+import com.revibe.feature.profile.presentation.components.ProfileScreen
 import com.revibe.feature.registration.di.RegistrationDependencies
 import kotlinx.coroutines.runBlocking
 
@@ -177,6 +178,7 @@ fun AppNavHost(
                 DaggerFavouritesComponent.factory()
                     .create(object : FavouritesDependencies {
                         override fun retrofit() = app.networkComponent.retrofit()
+                        override fun context() = app
                     },
                         userId = userId
                     )
@@ -235,12 +237,19 @@ fun AppNavHost(
         }
 
         composable(AppScreens.Profile.route) {
-            Box(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                Text("Профиль — в разработке")
+
+            val userName = remember {
+                runBlocking { app.tokenDataStore.getUserName() ?: "Пользователь" }
             }
+
+            ProfileScreen(
+                userName = userName,
+                onLogoutClick = {
+                    navController.navigate(AppScreens.Login.route) {
+                        popUpTo(0)
+                    }
+                }
+            )
         }
 
         composable(AppScreens.Cart.route) {
