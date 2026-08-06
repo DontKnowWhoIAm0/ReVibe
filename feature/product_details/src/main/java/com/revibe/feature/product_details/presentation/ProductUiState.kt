@@ -15,5 +15,4 @@ data class ProductUiState(
     val isFavourite: Boolean = false,
     val isInCart: Boolean = false,
     val favouriteError: String? = null
-
 )

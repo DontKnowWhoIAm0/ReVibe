@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.revibe.core.data.local.TokenDataStore
 import com.revibe.feature.login.domain.model.LoginRequest
+import com.revibe.feature.login.domain.usecase.GetUserProfileUseCase
 import com.revibe.feature.login.domain.usecase.LoginUserUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,6 +13,7 @@ import javax.inject.Inject
 
 class LoginViewModel @Inject constructor(
     private val loginUserUseCase: LoginUserUseCase,
+    private val getUserProfileUseCase: GetUserProfileUseCase,
     private val tokenDataStore: TokenDataStore
 ) : ViewModel() {
 
@@ -62,6 +64,9 @@ class LoginViewModel @Inject constructor(
                 )
                 tokenDataStore.saveToken(response.token)
                 tokenDataStore.saveUserId(response.userId)
+
+                val profile = getUserProfileUseCase()
+                tokenDataStore.saveUserName(profile.fullName)
 
                 _state.value = _state.value.copy(isLoading = false, success = true)
             } catch (e: Exception) {

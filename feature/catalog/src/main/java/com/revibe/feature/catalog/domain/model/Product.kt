@@ -12,5 +12,7 @@ data class Product(
     val brand: String,
     val size: String,
     val condition: String,
-    val category: String
+    val category: String,
+    val branchId: String,
+    val branchAddress: String
 )

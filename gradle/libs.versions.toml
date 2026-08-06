@@ -24,6 +24,8 @@ material3Android = "1.4.0"
 
 datastore = "1.1.1"
 
+room = "2.7.1"
+
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -58,9 +60,14 @@ androidx-datastore-preferences = { group = "androidx.datastore", name = "datasto
 
 coil-compose = { group = "io.coil-kt", name = "coil-compose", version.ref = "coil" }
 
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+
 [bundles]
 compose-ui = ["compose-ui", "compose-ui-graphics", "compose-ui-tooling", "compose-ui-tooling-preview", "compose-material-icons",  "compose-foundation", "androidx-material3-android"]
 retrofit = ["retrofit", "retrofit-converter-gson"]
+room = ["room-runtime", "room-ktx"]
 
 
 [plugins]

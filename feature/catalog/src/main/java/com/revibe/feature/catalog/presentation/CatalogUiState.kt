@@ -7,6 +7,7 @@ data class CatalogUiState(
     val allProducts: List<Product> = emptyList(),
     val products: List<Product> = emptyList(),
     val favouriteArticles: Set<UUID> = emptySet(),
+    val cartArticles: Set<UUID> = emptySet(),
     val filters: FiltersState = FiltersState(),
     val searchQuery: String = "",
     val isLoading: Boolean = false,
